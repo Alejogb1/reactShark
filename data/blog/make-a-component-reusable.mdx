@@ -1,0 +1,142 @@
+---
+title: 'How to make a React Component Reusable.'
+date: '2018-08-15'
+tags: ['']
+draft: false
+summary: "Let's define first, what is a component. It is a function. Components are functions. So in the topic of this article, we want to make that function utilizable for multiple cases."
+---
+
+_Title_: Learn how to make a Component Reusable
+
+_Author_: Alejo G.B
+
+_Subject_: React | Frontend Development
+
+_Language_: English
+
+_Resource used to make this article_: [Pure React](https://www.purereact.com/)
+
+# You will learn:
+
+1. What is a component
+2. How to make a component reusable
+3. Use
+
+## What is a component?
+
+Let's define first, what is a component. It is a function. Components are functions. So in the topic of this article, you want to make that function utilizable for all types of data and parameters that you pass into a function. In more simple words, you don't want your function to be static and useful for only one case.
+
+Let's make some analogy with HTML.
+
+```
+<h1>Welcome to my website</h1>
+```
+
+This line doesn't change, it's some simple heading of a website. Now lets say you create a JavaScript function for it:
+
+```
+function () {
+    document.body.createElement("h1").className = "heading"
+    document.querySelector(".heading").textContent = "Welcome to my website"
+}
+```
+
+Take some seconds and read that function.
+This would result in an HTML heading created by a JavaScript function. Note that if you are getting a hard time trying to understand this function, we are just creating an h1 utilizing a DOM concept.
+
+Now, when someone refers you to make a "reusable component", you gotta know that although you are creating a JavaScript function to create an element, this doesn't mean that you are making that function reusable.
+
+## In order to create a reusable component, you need to:
+
+1. Create data
+2. Make your function open to new parameters
+3. Pass that data to the function or children (props!)
+4. The function has to be dynamic and able to render something based on the data you've passed
+
+Another answer is: Take a function and pass it to its props and map all the data.
+
+Let's touch some React code with a cool example. In this case, I've cloned a Medium component.
+
+```
+ <main className="article">
+          <div className="content">
+            <AuthorLogo source="./someurl.jpg" />
+            <AuthorName/>
+            <Title/>
+            <Description description={article.description} />
+            <div className="buttons">
+              <BookmarkButton />
+              <MoreOptionsButton />
+            </div>
+          </div>
+          <MainImage/>
+</main>
+```
+
+You can go to the full code here: https://codesandbox.io/s/medium-component-tjcid
+
+This is a regular component. It just displays what it is in the image. But let's come back to the topic of this article, how do I make this component reusable?
+
+Well first:
+
+Can you see that we don't pass any props to any of the children components that are being shown there? We need to pass to these components some props and create some data.
+
+Create data:
+
+```
+const Articles = [
+  {
+    id: 1,
+    title:
+      "Understanding Why People Buy $4000 Shoes Will Change Your Marketing Strategy",
+    description:
+      "It helped me understand my customers and revolutionize my firm",
+    author: "Jack Nich",
+    authorImage:
+      "https://cdn-images-1.medium.com/fit/c/40/40/1*1V8zE96CwGT_ImoqLmoZOQ.jpeg",
+    category: {
+      name: "Marketing",
+      description: "All About Mark"
+    },
+    image: {
+      url: "https://miro.medium.com/max/368/1*qpnWO6QtwG6A3UcLeCoUwQ.jpeg",
+      alt: "shoe"
+    },
+    readingTime: 5,
+    basedOnHistory: true
+  },
+  // You can create more objects
+```
+
+Now map through all the objects, and create some props for the components
+
+```
+<div>
+      {Articles.map((article) => (
+        <main className="article">
+          <div className="content">
+            <AuthorLogo source={article.authorImage} />
+            <AuthorName
+              author={article.author}
+              category={article.category.name}
+            />
+            <Title title={article.title} />
+            <Description description={article.description} />
+            <div className="buttons">
+              <BookmarkButton />
+              <MoreOptionsButton />
+            </div>
+          </div>
+          <MainImage image={article.image.url} alt={article.image.alt} />
+        </main>
+      ))}
+    </div>
+```
+
+See how this is different from the before! You can REUSE this same component for multiple objects and be able to display that data dynamically.
+
+Now you can create multiple components because you are mapping through a defined set of data and displaying them thanks to props.
+
+![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1619732078323/NOu4u7x-O.png)
+
+Also, as you may have already noticed, you CAN'T pass data to a static component because by definition it does not accepts props neither new parameters.

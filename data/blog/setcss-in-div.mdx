@@ -1,0 +1,87 @@
+---
+title: 'How to Style a div in React?'
+date: '2021-05-19'
+tags: ['styled-components', 'css']
+draft: false
+summary: "Due to the starter style of this question, I'm going to dive on how to set up a CSS class as if you didn't know anything about styling in React..."
+---
+
+_Title_: How to Style a div in React
+
+_Author_: Alejo G.B
+
+_Subject_: React | Frontend Development
+
+_Language_: English
+
+_Source_: [FullstackOpen Guide](https://fullstackopen.com/)
+
+# How to style divs (or components) with CSS in React
+
+Hey in this article we are going to cover how to set a CSS class or classNames to a div in a React component. Due to the starter style of this question, I'm going to dive really into how you can style your React component as if you didn't know anything about it.
+
+According to what I've read. I see that you can have 3 ways on how to create inline styling
+
+Style with objects
+
+```
+const Component = () => {
+    const container = {
+        color: 'green',
+        fontStyle: 'italic',
+        fontSize: 16
+    }
+    return (
+        <div className={container}></div>
+)}
+```
+
+Another solution is to create a separate CSS file and import it on the component you're going to use
+
+```
+import from './styles.css';
+
+const Component = () => {
+    return (
+        <div className="container"></div>
+)}
+```
+
+For inline styling, you can do (tho in this post I explain why this is a bad practice in React)
+
+```
+<div style={{ color : "green" }}></div>
+```
+
+# Use className not class
+
+This may be so obvious for those who have already started using React in projects and stuff. But if you're just starting out this may be new for you and knowing this upfront may save you some "uh?" moment. The stuff goes something like this:
+
+```
+<h1 class="container"> Hello World </h1>
+```
+
+In react you need to use className instead of class. That's how it's done, and that's how you add classes from JavaScript (this is purely a DOM concept, and if you are not familiarized with this, that's why its helpful to know DOM before jumping to React directly). Reviewing this concept:
+
+```
+document.body.createElement("h1")className = "container"
+```
+
+So when creating a React component always remember to add a className instead of a simple class in your component.
+
+```
+<Heading className="container" />
+```
+
+# Styled components
+
+Have you ever felt like your CSS was too big that you couldn't understand any of it? Well then, this solution might be appealing to you. The main benefit of using styled-components its how easy is to use. When using React and another preprocessor or smt like Tailwind, with similar stuff you will encounter some challenges with trying to set up the project and use Webpack to compile it. Anyways this solution doesn't require any of it, it's simple and only needs one dependency to be added.
+
+The basics of styled components is that you create a single style.css file and inside it you create a class in the following format (be ware the backticks are own of styled components):
+
+```
+const container = styled.div`
+color: red,
+background: black
+`
+```
