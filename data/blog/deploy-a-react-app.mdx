@@ -1,0 +1,45 @@
+---
+title: 'How to Deploy a React App with and Not Die.'
+date: '2021-05-22'
+tags: ['Vercel']
+draft: false
+summary: "At this moment I've never deployed a React app. So you are going to learn with me and I will document how I've done it."
+---
+
+_Resource used to make this article_: [Vercel official docs](https://vercel.com/docs/)
+
+# Quick answer:
+
+- Push your app to a Github repo (if you haven't already)
+  - It can be private or public
+- Go to https://vercel.com/
+- Create a new account and sync with your Github account
+- Create "New project" and click on import your git repository
+- Now make sure you choose the appropriate root directory of your app for Vercel to deploy it.
+- Hopefully, you get your app to deploy!
+
+Now, what if you make a commit and you want to redeploy your app so it gets that new commit?
+The short answer is: Vercel takes care of that and makes the deployment for you such as it has access to your Github repo.
+
+**BUT, you might commit and push some change, but still see no change in your deployed app. Why? Well, it might be that during the deploy Vercel run into a build error and your new commit didn't get to the production app, showing so your previous app version. **
+
+# Deploy React apps for complete beginners\*
+
+So as far as I know there are two ways for you to deploy a React app, not a static HTML website, neither a node.js app. Just the front end where you've used React. So you have two ways:
+
+1. Heroku
+2. Vercel
+   I prefer Vercel because they seem to be the most prominent cloud company for deploying hobby apps, in just a few seconds, to production-ready. 
+   Deploying with Vercel with no Errors
+
+Let's start with creating a Vercel app and syncing your Github account for it. This last thing is important because Vercel, like Heroku, works with your Github repo to actually deploy and build the code.  Really there is no more than this, and selecting on "New project" and choosing the repo you want to deploy. So in this article, I want to cover some issues I've encountered and that may be helpful for you to know.
+
+## Choose the correct Root repository
+
+This error may appear in a read log manner into your Vercel console you tried to deploy one of your React apps. It can be caused due to some React error that your app is having and that you should solve and push before trying to deploy your app, so it doesn't get any build error afterward. Another way to solve this is by changing the path of your Root Directory. Say that your app is placed on a subfolder in your repo and that you are trying to deploy a folder that is one level higher than the root of your actual project. So by changing to your actual project directory you will not get the error that Vercel couldn't run yarn build
+
+## #2 Fix the damn build error during deploy
+
+## Why my New commit doesn't get deployed or updated?
+
+To make sure everything is going as supposed, go to your Github repo and check if your latest commit has passed Vercel checks. If not click on "Details" and see why you might be running into some issue. And of course, try to fix it. In my case I have been using Axios locally using the --save command but didn't install it in the package.json so when Vercel tried to build my app, it didn't install the Axios dependency so it gave me an error during that build.
