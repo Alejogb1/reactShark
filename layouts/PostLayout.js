@@ -50,14 +50,14 @@ export default function PostLayout({ children, frontMatter, next, prev }) {
                     <img src={siteMetadata.image} alt="avatar" className="w-10 h-10 rounded-full" />
                     <dl className="text-sm font-medium leading-5 whitespace-nowrap">
                       <dt className="sr-only">Name</dt>
-                      <dd className="text-gray-900 dark:text-gray-100">{siteMetadata.author}</dd>
+                      <dd className="text-gray-900 dark:text-gray-100">Alejo G.B</dd>
                       <dt className="sr-only">Twitter</dt>
                       <dd>
                         <Link
                           href={siteMetadata.twitter}
                           className="text-blue-500 hover:text-blue-600 dark:hover:text-blue-400"
                         >
-                          {siteMetadata.twitter.replace('https://twitter.com/', '@')}
+                          {siteMetadata.twitter.replace('https://twitter.com/alejogb1', '@')}
                         </Link>
                       </dd>
                     </dl>
