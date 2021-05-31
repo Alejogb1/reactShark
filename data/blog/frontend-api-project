@@ -1,0 +1,522 @@
+---
+title: 'Learn APIS. How to build a real Frontend React Project.'
+date: '2021-05-31'
+tags: ['Project, Hooks, Vercel, Redux, CSS']
+draft: false
+summary: "It is a React app that fetches an API and displays all the products based on the search you've made."
+---
+
+At this moment I have 19, and currently living in Argentina, and studying a CS-related career. Recently I've completed a personal challenge that simulates the UI and functionality of [Mercado Libre's](https://www.mercadolibre.com.ar/) app, which is as big as Amazon here in Latam. What this means, is that if you get to understand the topics of this lesson, you may get to do the same but for Amazon or any other big famous marketplace, and completely level up your skills.
+
+## What we are gonna build
+
+Demo [https://meli-xi.vercel.app/](https://meli-xi.vercel.app/)
+
+**It is a React app that fetches an API and displays all the products based on the search you've made. You are also able to view every single product (needing for you to make another fetch to look that product info). And that's it. It has some challenges but if you are able to make a project of this kind, then it might a game-changer for your skills and career.**
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b6f5d9a9-3d2b-4aa8-9045-2d4862829f00/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b6f5d9a9-3d2b-4aa8-9045-2d4862829f00/Untitled.png)
+
+### Topics covered:
+
+- React Router
+- Hooks (useReducer, useState, useEffect)
+- Reducer
+- Some weird flex of react-bootstrap
+
+### Project setup
+
+We are going to call this project MELI. Run and initialize your app
+
+```jsx
+npx create-react-app meli
+```
+
+The file structure of our main components and pages will look something like this:
+
+```jsx
+src/
+		Pages/
+					Product**s**.js
+					Product.js
+		Components/
+					Header.js
+					ProductAction.js
+					SellerInfo.js
+		Routes/
+					index.js
+		customHooks/
+					useProduct.js
+		reducers/
+					/actions
+					products.js
+		App.js
+		styles.css
+```
+
+## Creating App.js | The *most parent* element
+
+Our app.js looks like this 
+
+```jsx
+import {useState} from "react"
+import Routes from "./Routes/index"
+import GlobalSyles from "./styles/GlobalStyles"
+import {Container} from "react-bootstrap"
+import "./styles.css"
+
+function App() {
+
+  const [search, setSearch] = useState(null)
+
+  const handlerSearch = product => setSearch(product)
+
+  return (
+    <Container>
+      <Routes search={search} handlerSearch={handlerSearch}/>
+      <GlobalSyles/>
+    </Container>
+  );
+}
+```
+
+The importance of the component above is that App.js (commonly used as our *most parent* component), will handle the state of our search and then pass it to our Products. If you don't get this that's totally okay, I explain like shit. But tho, you should see the Routes file to understand what role is playing our *handlerSearch* and the state: *search.* 
+
+[https://imgur.com/a/QTrmGJV](https://imgur.com/a/QTrmGJV)
+
+Remember our Products component is the list of products.
+
+[https://imgur.com/a/HLmHiXi](https://imgur.com/a/HLmHiXi)
+
+## Building the Routes. The second most important file 📍
+
+- (first most important thing in this project is the API and how to fetch it)
+
+```jsx
+import {useState} from "react"
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom"
+import Header from "../Components/Header/Header"
+import Products from "./../Pages/Products/index"
+import Product from "./../Pages/Product/index"
+
+const Routes = ({handlerSearch, search}) => {
+    return (
+        <Router>
+            <Header handlerSearch={handlerSearch}/> 
+            <Switch>
+                <Route path="/" exact>
+                    <h1 style={{textAlign:"center"}}>Search for a product</h1>
+                </Route>
+                <Route path="/products">
+                    <Products search={search}/>
+                </Route>
+                <Route path="/product/:id" component={Product}/>
+            </Switch>
+        </Router>
+    )
+   
+}
+
+export default Routes;
+```
+
+Have you seen how handlerSearch is being passed to our header, which is our search bar, for then altering the *search* state so, the App then delivers it to the Routes, and it to the Products page. I will again paste this image, hoping I can explain myself.
+
+[https://imgur.com/a/QTrmGJV](https://imgur.com/a/QTrmGJV)
+
+## Building the Products page | List of products and custom hook
+
+Let build the Products.js page. It will fetch the products and display them as if they were a list. The challenge of building this page is applying the useEffect and dispatching each product info with [useReducer](https://reactshark.vercel.app/blog/usereducer). Another thing that may take you some time is trying to style the app, which should look like [Mercado Libre](https://www.mercadolibre.com.ar/)'s current UI.
+
+Let's take a look into the API.
+
+```jsx
+fetch("https://api.mercadolibre.com/sites/MLA/search?q=iphone&limit=8")
+```
+
+It returns a list of the products, with a maximum of 8 objects.
+
+```jsx
+0: {id: "MLA922358125", site_id: "MLA", title: "Apple iPhone 11 (64 Gb) - (product)red", seller: {…}, price: 149000, …}
+1: {id: "MLA922067905", site_id: "MLA", title: "Apple iPhone 11 (128 Gb) - (product)red", seller: {…}, price: 160000, …}
+2: {id: "MLA922442785", site_id: "MLA", title: " iPhone SE (2nd Generation) 64 Gb (product)red", seller: {…}, price: 94999, …}
+3: {id: "MLA921343125", site_id: "MLA", title: " iPhone SE (2nd Generation) 128 Gb Negro", seller: {…}, price: 89900, …}
+4: {id: "MLA920043901", site_id: "MLA", title: " iPhone 7 32 Gb Negro Mate", seller: {…}, price: 64999, …}
+5: {id: "MLA916796918", site_id: "MLA", title: " iPhone XR 64 Gb Negro", seller: {…}, price: 129525, …}
+6: {id: "MLA897397963", site_id: "MLA", title: "iPhone 11 Pro Max 64 Gb Gris Espacial", seller: {…}, price: 249099, …}
+7: {id: "MLA915277040", site_id: "MLA", title: " iPhone 8 Plus 64 Gb Gris Espacial", seller: {…}, price: 119000, …}
+```
+
+And each object looks like this:
+
+```jsx
+accepts_mercadopago: true
+address: {state_id: "AR-B", state_name: "Buenos Aires", city_id: null, city_name: "Martinez"}
+attributes: (7) [{…}, {…}, {…}, {…}, {…}, {…}, {…}]
+available_quantity: 1
+buying_mode: "buy_it_now"
+...
+// There's more 
+```
+
+### Creating our Products listing Page.
+
+We are going to map every object and display every product.  
+
+```jsx
+import {Link} from "react-router-dom"
+import {useReducer} from "react"
+import "../../styles.css"
+
+const Products = () => {
+
+return(
+        <div className="main">
+          <ul>  
+            {
+                state.products.length ? 
+                state.products.map((product, index) => (
+                    <li className="item" key={product.id}>
+                     
+                        <div className="card">
+                            <div className="image-wrapper">
+                              <Link  to={`/product/${product.id}`}>
+                                <img src={product.thumbnail}/>
+                              </Link>
+                            </div>
+                            <div className="content-wrapper">
+                                {index === 0 ? (
+                                 <div className="best-selling-tag">MÁS VENDIDO</div>
+                                ) : <></>}
+                                <Link className="item-link" key={product.id} to={`/product/${product.id}`}>
+                                        <h2 className="item-title">{product.title}</h2>
+                                </Link>
+                                <div className="item-price">
+                                    <span className="price-symbol">$</span>
+                                    <span className="price-tag">{product.price}</span>
+                                </div>
+                                <div className="item-shipping-tag">
+                                    <span>Envío gratis</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    
+                ))
+                : <h1>Loading...</h1>
+            }
+          </ul>
+    </div>
+)}
+```
+
+Wait, this piece of code is still incomplete. Before mapping our products, we should apply useEffect and useReducer. First, fetch the products and then dispatch them to our state. 
+
+So add the following to the current page:
+
+```jsx
+import axios from "axios";
+import {useEffect, useReducer} from "react"
+import { FETCHING, FETCH_SUCCESS } from "./../../reducers/actions/products";
+import { productReducer, initialState } from "./../../reducers/product";
+
+const Products = ({search}) => {
+	const getProducts = async () => {
+        try {
+            const {data} = await axios.get(
+                `https://api.mercadolibre.com/sites/MLA/search?q=${search}&limit=8`
+            )
+            dispatch({ type: FETCH_SUCCESS, payload: { data : data.results}})
+        } catch (e) {
+            console.error(e)
+        } 
+    }
+useEffect(() => {      
+        getProducts() 
+    }, [search])
+}
+```
+
+You can check my articles on useReducer.
+
+### Creating the reducer. Handling our Products Listing info.
+
+**Skip the following paragraph if you want to go straight to the point**
+
+For this, I'm trying to get why I've done it this way, just to clear out, I've used some course to create the project and internet resources, so part of this article is me trying to re-explain on my own way. My doubt is on why I created a store for saving our product info and then giving it to our Products page for it to map all the products. When I could have simply done it with no Redux, just fetching the products and then adding it to the same state. I think one of the reasons is to be able to manage a more complex initialState that will not only be able to save our Products info, but also our single product info and description of it (which requires another endpoint). Don't worry, if you are confused, just try to understand how the following reducer works.
+
+> "Haven't you ever finished building something, and don't know why or how that thing even works?".
+
+Create the following actions inside your reducer folder:
+
+```jsx
+export const FETCHING = "FETCHING"
+export const FETCH_SUCCESS = "FETCH_SUCCESS"
+export const FETCH_ERROR = "FETCH_ERROR" 
+```
+
+Now create your reducer.
+
+```jsx
+import {FETCHING, FETCH_SUCCESS, FETCH_ERROR} from "./actions/products"
+
+export const initialState = {
+    fetching: true,
+    products: {},
+    product: {},
+    description : "",
+    error: false
+}
+export const productReducer = (state = initialState, action) => {
+    switch (action.type) {
+        case FETCHING:
+            return  {
+                ...initialState,
+                fetching: true
+            }
+        case FETCH_SUCCESS:
+            return  {
+                fetching: false,
+                products: action.payload.data,
+                error: false
+            }
+        case FETCH_ERROR:
+            return {
+                fetching: false, 
+                products: {},
+                error: true
+            }
+        default:
+            break;
+    }
+}
+export default {productReducer, initialState}
+```
+
+## Building the Header | Search bar 🔎
+
+One issue you might have when building any kind of *search bar* might be that **you don't want that search bar to reload every time you change pages.** So, in order to solve that we're going to use *React Memo.*
+
+```jsx
+import { Container, Row, Col, Form } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
+
+const Header = React.memo(({ handlerSearch }) => {
+	const history = useHistory();
+	  const search = (e) => {
+	      
+	    e.preventDefault()
+	    const [{value}] = e.target;
+	    const trimValue= value.trim();
+	    if(trimValue){ 
+	      handlerSearch(trimValue)
+	      history.push(`/products?search=${trimValue}`);
+	    }
+	return (
+	    <Container className="header">
+	      <Row className="header-row">
+	        <Col>
+	        <div className="logo"/>
+	          <Form className="search-bar" onSubmit={search}>
+	            <Form.Group>
+	              <Form.Control
+	                className="search-input"
+	                type="text"
+	                name="search"
+	                placeholder="Buscar productos, marcas y más..."
+	              />
+	            </Form.Group>
+	          </Form>
+	        </Col>
+	      </Row>
+	    </Container>
+	  );
+}
+```
+
+We are going to create an handler event called "search", inside the Header component. That will be executed whenever we do onSubmit on this form which is our search bar.
+
+```jsx
+import { useHistory } from "react-router-dom";
+
+const history = useHistory();
+	  const search = (e) => {
+  
+	    e.preventDefault()
+	    const [{value}] = e.target;
+	    const trimValue= value.trim();
+	    if(trimValue){ 
+	      handlerSearch(trimValue)
+	      history.push(`/products?search=${trimValue}`);
+    }
+```
+
+This search handler will allow us to whenever we search for a product, change the current URL with the current search query.
+
+Before the search:
+
+[]()
+
+After the search:
+
+[]()
+
+### Styling the header
+
+This was fun but took me some time. Basically, I went back and forth copying the styles from the original application and using fewer classes.
+
+Lets style the header size and the wrapper.
+
+```jsx
+.header {
+    background-color: #fff159;
+    height: 60px;
+}
+.header-row {
+    height: auto;
+    max-width: 1200px;
+    padding: 0 0 0 160px;
+    display: block;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+
+```
+
+Now building the search bar and positioning so it haves some optical balance (lol). 
+
+```jsx
+.search-bar {
+    content: '';
+    top: 0;
+    left: 60px;
+    right: -10px;
+    height: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+.search-input {
+    padding: 0 10px;
+    width: 90%;
+    border: none;
+    outline: none;
+    margin: 10px;
+    background-color: white;
+    height: 39px;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 20%);
+}
+```
+
+As you can see, in the search input we are using *outline* and *border.* This definitely matches the original search input because it doesn't show a black border whenever you click the search bar and taking the border, makes it look nicer. 
+
+Now add the logo. We are using the exact same logo of the Mercado Libre, 
+
+```jsx
+
+.logo {
+    position: absolute;
+    height: 34px;
+    width: 134px;
+    top: 11px;
+    background-image: url("https://http2.mlstatic.com/frontend-assets/ui-navigation/5.14.5/mercadolibre/logo__large_plus.png");
+}
+```
+
+### Styling the products
+
+And style the rest of it, which are the product listing and what is being shown above the search bar.
+
+```jsx
+
+.container {
+    margin: 0 auto;
+    max-width: 100%;
+}
+.item {
+    background: white;
+    border-bottom: thin solid #eee;
+    font-size: 16px;
+    font-weight: 300;
+    list-style: none;
+}
+.item-link {
+    text-decoration: none !important;
+    outline: none;
+}
+.item-title {
+    color: #333 !important;
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1.3;
+    margin-bottom: 12px;
+}
+
+.card {
+    padding: 20px 50px 20px 0;
+    display: flex;
+    flex-direction: row;
+}
+.image-wrapper {
+    box-sizing: content-box;
+    border-radius: 4px;
+    -webkit-flex-shrink: 0;
+    flex-shrink: 0;
+    font-size: 1px;
+    height: 130px;
+    margin: 0;
+    overflow: hidden;
+    padding: 0 24px;
+    width: 130px;
+}
+.image-wrapper img {
+    height: 100%;
+    width: 100%;
+}
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+.main {
+    
+    max-width: 600px;
+    margin: 0 auto;
+    font-family: Proxima Nova,-apple-system,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.35;
+}
+.item-price {
+    color: #333;
+    display: -webkit-flex;
+    display: flex;
+    font-size: 24px;
+    font-weight: 400;
+    margin-right: 8px;
+    line-height: 1.25;
+    margin-bottom: 12px;
+
+}
+.item-shipping-tag {
+    margin-bottom: 12px;
+}
+.item-shipping-tag {
+    color: #00a650;
+    font-size: 14px;
+}
+.best-selling-tag {
+    margin-top: 4px;
+    margin-bottom: 10px;
+    background:#FF7733;
+    color: white    ;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    width: fit-content;
+}
+```
+
+I don't want to go and explain every single class, mainly cause this article won't make an emphasis on the styling itself, rather on the functionality and the React aspect of it. However I encourage you to take a look at each class and how it makes the whole UI. You can also go to Amazon or Mercado Libre and start seeing each class and how they style their website.
+
+Exercise for home:
+
+- Build the feature to be able to look for a single product (see the routes for a hint)
