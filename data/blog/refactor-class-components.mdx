@@ -1,0 +1,238 @@
+---
+title: 'Refactor a Code Base (Typical work as a React Dev).'
+date: '2021-05-27'
+tags: ['Hooks']
+draft: false
+summary: 'In this article, we are going to cover how to go from using classes, OOP programming to using an approach with functional programming and hooks.'
+---
+
+**In this article, we are going to cover how to go from using classes, OOP programming to using an approach with functional programming and hooks. This article is directed towards those who already know something about programming, maybe know a lot about the back end but still use an old approach with React and they are not up to date with React modern practices and custom Hooks.**
+
+How a component with Hooks, and with no OOP looks like:
+
+```jsx
+const Login = () => {
+
+const [state, setState] = ***useState***("data")
+
+const initialState = {
+	data: false,
+	error: false
+}
+
+const {state, dispatch} = ***useReducer***(reducer, initialState)
+
+***useEffect***(() => setState('mounted'), []);
+
+	return (
+		<>
+			 <SignInForm  loginInfo={state}/>
+			 <button onClick={()=>dispatch(data: true, error: false)} />
+		</>
+)
+}
+
+```
+
+The idea is not to add as many hooks as you can, this is only to give you an idea of everything that can be done. Across this article, I'm going to show in more detail how to use each one of them.
+
+1. The equivalent of the lifecycle with react hooks:
+
+   - Mount = when a component **loads**, Update = when it **updates**, Unmount= when **deletes.**
+   - componentDidMount, componentDidUpdate → useEffect
+   - componentWillUnmount → useEffect(() ⇒ {}) // useEffect + callback
+
+2. Replace `this.setState` with `const [state, setState] = useState()` (This is a hook)
+
+3. Replace multiple setState with useReducer.
+
+- `const reducer = (state, newState) => { {...state, ...newState} }`
+
+  4.  A class component is no longer used, you don't need to use render. Go instead for:
+
+```jsx
+const Component = () => {
+  return (
+    <>
+      <h1>Component</h1>
+    </>
+  )
+}
+```
+
+Let's say you receive a task on your job or a freelance task which is to:
+
+"Refactor All CodeBase to contain React Hooks only"
+
+### A brief introduction
+
+The image below, shows all the methods that are being initialez in your your component's lifeCYCLE. From when its created and rendered by your website and JS DOM to even when is unmounted or removed from the DOM.
+
+![Image taken from "Pure React" book](https://i.postimg.cc/c1DGGSK8/Untitled-2.png)
+
+Image taken from "Pure React" book
+
+To learn Hooks, you don't need to know lifecycle methods. You may need to have an understanding of where each one is placed in your component's life. But that's it.
+
+You have some keywords above which are "Mount", "Render", "Update", and "Unmount", which describe in what phase your component might be changed and how it is going to be changed, or deleted by the DOM.
+
+# Refactoring classes, lifecycle "this" and JSX.
+
+### UseEffect.
+
+Let's say you have a Login component. Which files you call it like this.
+
+```jsx
+Login.jsx
+```
+
+```jsx
+import React from 'react'
+import { hot } from 'react-hot-loader'
+import SignInForm from './signInForm'
+
+class Login extends React.Component {
+  state = 'data'
+
+  componentDidMount() {
+    this.setState('I am mounted!')
+  }
+
+  render() {
+    return (
+      <React.fragment>
+        <SignInForm logIn={logIn} />
+      </React.fragment>
+    )
+  }
+}
+
+export default hot(module)(LoginPage)
+```
+
+Refactored code:
+
+```jsx
+import SignInForm from './signInForm';
+import {useState} from "react"
+
+const [state, setState] = useState("data")
+
+useEffect(() => setState('mounted'), []);
+
+const Login = () => {
+	return (
+		<>
+			 <SignInForm loginInfo={state}>
+		</>
+)
+}
+
+export default LoginPage
+```
+
+1. As far as I know, you don't need a hot Loader for React, it automatically saves your changes and displays them to your localhost server.
+2. Also you don't need to import React as module. It already works without needing to import it.
+3. In a class component, you would need to use `render(return())` but in this case, we only use the `return()`
+4. React.fragment can be replaced with `<></>`
+5. Your file can be called `Login.js` instead with `.jsx`
+
+# useReducer
+
+[One of my previous articles explaining useReducer](https://reactshark.vercel.app/blog/usereducer).
+
+When thinking about useReducer and refactoring, we are thinking of trade-offs, simplifying our test experience, and writing less code.
+
+### Trade-offs | Decreasing the number of states
+
+```jsx
+setClicks(clicks + 1)
+setPositiveFeedback(positiveFeedback + 1)
+setNegativeFeedback(negativeFeedback + 1)
+setFetch(true)
+SetLoading(true)
+```
+
+Lets you have an app with all kind of states and values that you are changing here and there. So in order to improve that you could implement useReducer in your app do something like this:
+
+1. Create a huge initialState object containing all of your states:
+
+```jsx
+const initialState = {
+  clicks: 0,
+  positiveFeedback: 0,
+  negativeFeedback: 0,
+  setFetch: false,
+  setLoading: false,
+}
+```
+
+2. Create useReducer:
+
+```jsx
+const [state, dispatch] = useReducer(reducer, initialState)
+```
+
+3.  Create the reducer
+
+```jsx
+const reducer = (state, newState) => {
+	{...state, ...newState}
+}
+```
+
+4. Dispatch
+
+```jsx
+dispatch({
+  clicks: clicks + 1,
+  positiveFeedback: positiveFeedback + 1,
+  negativeFeedback: negativeFeedback + 1,
+  setFetch: true,
+  setLoading: true,
+})
+```
+
+Notice how you don't need to use a _type_ of the action you are dispatching, such as useReducer allows you to not do that.
+
+In this case, your "newState" is simply passed as the second argument to your reducer function.
+
+### Testing with useReducer.
+
+This is what unit testing on a redux-connected componente (not with useReducer) looks like:
+
+```jsx
+describe('My Connected React-Redux Component', () => {
+  let store;
+  let component;
+
+  beforeEach(() => {
+    store = mockStore({
+      myState: 'sample text',
+    });
+
+    store.dispatch = jest.fn();
+
+    component = renderer.create(
+      <Provider store={store}>
+        <MyConnectedComponent />
+      </Provider>
+    );
+  });
+```
+
+1. You need to import your store
+2. Then render that component and simulate that one component is passing the store to the children
+
+Instead you could go with a useReducer not needing to do any of that:
+
+```jsx
+it('returns new state for "update" type', () => {
+  const initialState = [1]
+  const updateAction = { type: 'update', newState: [1, 2, 3] }
+  const updatedState = fooReducer(initialState, udpateAction)
+  expect(updatedState).toEqual([1, 2, 3])
+})
+```
+
+Hope you enjoyed this :P
