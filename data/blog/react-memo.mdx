@@ -1,0 +1,47 @@
+---
+title: 'What is react.memo() and when to use it? (How I fixed a bug with it).'
+date: '2021-06-01'
+tags: ['react']
+draft: false
+summary: 'React.memo() is a high order component, that allows you to not re-render your component unless the props have changed. But you want to know when and how to use it right?'
+---
+
+**`React.memo()` is a high order component, that allows you to not re-render your component unless the props have changed.**
+
+But you want to know when and how to use it right?
+
+This article will be about React.memo(), giving you a personal experience I've had, and how I fixed a bug on my app with it. Also, I will try to answer some of the following questions: What is it used for? How or when to use it.
+
+### When you should use it?
+
+For general scenarios, do always use React.memo() when you see that your component is being re-rendered unnecessarily or either it is making your app re-render when any prop is being changed. That's it really, and understand that fundamentally a component will re-render when its state does.
+
+### Why you should use it?
+
+In the example shown below, it might kind of obvious why I've implemented React.memo. But, apart from fixing a bug, it might optimize your app so it saves you _computational power_. Re-render means more wait time for the user.
+
+### A little story and a use case for React.memo()
+
+I've been working on a project with my brother. Basically, it is a React app that uses Express for the backend. Now while we were talking about the app, I asked him: "Bro, have you found any bug in this app? Cause I didn't find any. To what he answered me: "Oh yea, I've found this one:
+
+Basically, the app had a page where it brought a prop, and then we would go to another page, and then when we went back to it, that prop would be gone, leaving that page with no info (which was the prop's purpose to not do so).
+
+Another example is on headers. In one of my [articles where I make a walkthrough on a frontend project](https://reactshark.vercel.app/blog/frontend-api-project), React.memo() is being used for the search bar. The reason is that the header or search bar is a common component across the entire app, so it's not necessary for it to get re-rendered every time something else changes.
+
+### How to use it?
+
+You don't need an extra dependency, React.memo comes with React. So in order to add React.memo() in your component you should add it at the top:
+
+```jsx
+import {React} from "react"
+
+const Header = React.memo( handlerSearch ) => {}
+```
+
+For classes components:
+
+```jsx
+import { React } from 'react'
+
+export default React.memo(Header)
+```

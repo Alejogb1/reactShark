@@ -1,0 +1,68 @@
+---
+title: 'Local Storage in React. Recipe.'
+date: '2021-06-03'
+tags: ['react']
+draft: false
+summary: 'For instance, you migh feel stucked when trying to implement localStorage into your app. The truth is that using localStorage in React is almost the same as you would do with a JavaScript app.'
+---
+
+For instance, you migh feel stucked when trying to implement localStorage into your app. The truth is that using localStorage in React is almost the same as you would do with a JavaScript app.
+
+## localStorage in React
+
+```jsx
+const [email, setEmail] = useState('')
+
+localStorage.setItem('email', email)
+```
+
+This should work. Here we are asking our localStorage to save some info by using the _setItem_ method. So, our component will re-render whenever our state changes, in this case our email, and so the localStorage. But let's see how this exactly works and what is happening here with a real form.
+
+### - In practice, building a form.
+
+```jsx
+import './styles.css'
+import { useState } from 'react'
+
+export default function App() {
+  const [email, setEmail] = useState('')
+  const handleEmail = (e) => {
+    e.preventDefault()
+    setEmail(e.target.value)
+    localStorage.setItem('email', email)
+  }
+  return (
+    <form className="App">
+      <input placeholder="type your email" onChange={handleEmail} value={email} />
+      <button type="submit" placeholder="type your email">
+        Login
+      </button>
+    </form>
+  )
+}
+```
+
+Here we reload the app but theres still our email data saved in Local Storage.
+
+[![Captura2131sa.png](https://i.postimg.cc/9fW67gfG/Captura2131sa.png)](https://postimg.cc/VJVZyRn6)
+
+### With useEffect
+
+You have a birthday app with some dates here and there.
+
+```jsx
+useEffect(() => {
+  let data = localStorage.getItem('dates')
+  if (data != null) {
+    setTaskItems(JSON.parse(data))
+  } else {
+    setDates([{ date: '14/02' }, { name: '12/02' }, { date: '27/03' }, { date: '8/06' }])
+  }
+}, [])
+
+useEffect(() => {
+  localStorage.setItem('dates', JSON.stringify(taskItems))
+}, [taskItems])
+```
+
+Notice how we are using both getItem and setItem to play with localStorage and be able to look for data and parse it.
