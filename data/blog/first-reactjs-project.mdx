@@ -1,0 +1,66 @@
+---
+title: 'How to Create your first React Project on VS Code.'
+date: '2021-06-07'
+tags: ['React']
+draft: false
+summary: 'This article covers NPM and NPX and a Basic command to initialize your app.'
+---
+
+In this article you are going to learn how to create a Reactjs project on Visual Studio Code.
+
+## Topics:
+
+- NPM and NPX
+- Basic command to initialize your app
+- node_modules and going through those errors
+
+## Step 1: Initializing your app
+
+```jsx
+npx create-react-app AppName
+```
+
+Instead of only installing a bunch of dependencies and that's it, npx is an abbreviation of npm, and it will initialize your React app with all the folder and basic setup you need to run a complete React app (without needing you to create the setup folders). It's like a starter kit or even _similar_ as those commands that create a skeleton of your Express app (if you come from a backend background).
+
+Also the last word: "AppName" will be the name of the folder containing all of your React app, it can be named whatever you want.
+
+## Step 2: Opening your app and exploring the basic setup
+
+After you've initialized your React app, you should open the folder where your app is contained:
+
+```jsx
+cd AppName
+```
+
+Inside your AppName, you should have a **_package.json_** folder. This folder is the place where you store all the instructions for newcomers to have the same dependencies you've used along with your project. But most important it contains the commands that allows you to run your app
+
+```jsx
+"scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+```
+
+## Last step: Running the app
+
+```jsx
+npm run start
+```
+
+If you see the error "npm didn't find the command 'start'", then you should look carefully at where are you in your folder path, if you are one folder up of the one containing your file and package.json then you might receive that error.
+
+That's it!
+
+## Some common issues you might run when setting up a React app for the first time
+
+So when I started learning React I've run through some npm, node_modules, and webpack errors that didn't allow me to run my app, even though I've done `npm install`. So you might be asking how did I solve it? Well, I didn't, that single npm error wasn't solvable, I remember that I could find some way to do so but after some time it would return. Something I've installed ( i think globally ) was messing up with my node_modules and dependencies. The way that I went through it was using another Windows user. Like a whole other workspace (same pc but different account).
+
+But don't get discouraged by this, my message here is that when you are just starting out you **might want to make things easier as possible** and as flawless as you can. If you can't solve one config or npm issue, continue and just create another whole project, and delete that one. Don't stop trying to mess up your whole head, on those details.
+
+## Cloning a React app
+
+When cloning, you are not installing node_modules, and this is what `npx create-react-app` does and it also creates the principal files (such as app.js and index.js). So **when you make a clone, make sure to do `npm install`**
+
+⚠️ If you do not do so, basically you will not have the things that the current app needs to be run. And when doing `npm run start` you will be returned with some npm errors.
