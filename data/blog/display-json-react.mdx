@@ -1,0 +1,83 @@
+---
+title: 'How to Display JSON data in React'
+date: '2021-06-8'
+tags: ['']
+draft: false
+summary: 'After reading this article you should be ready to make a fetch from some API and display data iteratively.'
+---
+
+After reading this article you should be ready to make a fetch from some API and display data _iteratively._
+
+## Simple answer
+
+```jsx
+const Clients = () => {
+  const data = [
+    {
+      id: 1,
+      name: 'Peter',
+      note: 'has a web design agency',
+    },
+    {
+      id: 2,
+      name: 'Andres',
+      note: 'Beware he has too much money',
+    },
+  ]
+  return (
+    <ul>
+      {data.map((client) => (
+        <li>
+          <h3>{client.name}</h3>
+          <p>{client.note}</p>
+        </li>
+      ))}
+    </ul>
+  )
+}
+export default Clients
+```
+
+[![Captura12313.png](https://i.postimg.cc/vmnfHPyb/Captura12313.png)](https://postimg.cc/yJVkLyWb)
+
+## How to import JSON data from an API instead of a local object
+
+Let's go with the Rick & Morty API.
+
+```jsx
+const Characters = () => {
+  const [data, setData] = useState([])
+  const getData = async () => {
+    // uso esta funcion en un useEffect
+    const result = await fetch('https://rickandmortyapi.com/api')
+    const data = await result.json()
+    setData(data)
+  }
+}
+```
+
+You can go see my other article where I explain in detail how to create a map inside JSX and how to map each character (I use the same scenario).
+
+```jsx
+setData(data)
+```
+
+It is important to you either set your fetched data to an state **to then be able to map it through**. Or either you could do something more advanced like implementing a reducer or redux, which I don't recommend if you are just starting out.
+
+## How to import JSON data from a backend server?
+
+You gotta run two localhosts, one for the frontend and the other one for the backend. And the backend server should provide some API that returns a JSON. Basically, the answer to this question, is that **is the same as you would normally do with any API.**
+
+Although the following example doesn't show the backend side, it should give you an idea on how you should import data from a backend server:
+
+```jsx
+const url = 'http://localhost:3000/api/data' // localhost:3000 is your backend
+
+const [state, setState] = useState({ data: undefined })
+
+const getData = async () => {
+  const response = await fetch(url)
+  const JSONdata = await response.json()
+  setState({ data: JSONdata })
+}
+```

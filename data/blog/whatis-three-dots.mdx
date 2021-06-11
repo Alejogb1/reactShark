@@ -1,0 +1,106 @@
+---
+title: "Using the 'three dots' in React to copy-paste"
+date: '2021-06-10'
+tags: ['']
+draft: false
+summary: 'The three dots is called the spread operator, and it saves you from copy-pasting.'
+---
+
+**The three dots is called the spread operator, and it saves you from copy-pasting.** There are some other use cases like rest parameters, where you can check in this [article](https://dev.to/sagar/three-dots---in-javascript-26ci).
+
+## Spread operator
+
+### 1. Having too much props to pass
+
+Let's say we have an app where we want to **display all the characters from Rick&Morty** using its API. So in order, to do that we have our Characters component and our Character component, the first one is in charge of passing all the characters values that have been fetched from the API to the single Character component. So for the purpose of this lesson, I'm not going to go through every detail of this app, just the essential to explain the spread operator.
+
+```jsx
+allCharacters.js
+```
+
+```jsx
+const allCharacters = () => {
+return (
+				{data.map((character) => (
+                <Character key={character.id} {...character} />
+				)}
+)}
+```
+
+_data_ are all the characters from the serie. So each character has values like gender, name, id, and more.
+
+```jsx
+const Character = ({ name, id, image, gender, species, status, created }) => {}
+```
+
+As you can see there we are destructuring all of our `{...characer}` previous passed. I say copy paste cause we could easily have passed our props like this
+
+```jsx
+<Character
+  key={character.id}
+  id={character.id}
+  gender={character.gender}
+  species={character.species} /* etc */
+/>
+```
+
+### 2. Copying our state and modifying it
+
+See any issue with the code below?
+
+```jsx
+import './styles.css'
+import { useState } from 'react'
+export default function App() {
+  const [state, setState] = useState({
+    gender: 'male',
+    date: '18 / 12 / 2002',
+    verified: false,
+  })
+  const changeVerified = () => {
+    setState({ verified: !state.verified })
+  }
+  return (
+    <div className="App">
+      <p>
+        {state.gender} {state.date} - {state.verified ? 'true' : 'false'}
+      </p>
+      <button onClick={changeVerified}>Change verified</button>
+    </div>
+  )
+}
+```
+
+<div style={{ position: 'relative', paddingBottom: '56.25%', height: '0' }}>
+  <iframe
+    src="https://www.loom.com/embed/748c177a41694e838b6ad1835c113927"
+    frameborder="0"
+    webkitallowfullscreen
+    mozallowfullscreen
+    allowfullscreen
+    style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%' }}
+  ></iframe>
+</div>
+
+❗As you can see, our state, which is initially shown as "male 18 / 12 / 2002 - false" in the screen, when changed one attribute inside it, **male and date dissapears**
+
+**Why is this?** Because we are not copying our previous state, and we **rewriting our current state** to only have the verified attribute. In order to fix this, we should use now a **spread operator**
+
+```jsx
+const changeVerified = () => {
+  setState({ ...state, verified: !state.verified })
+}
+```
+
+Now it works, without deleting our previous state values, we just modify what we are changing, in this case, the **\*verified** attribute.\*
+
+<div style={{ position: 'relative', paddingBottom: '56.25%', height: '0' }}>
+  <iframe
+    src="https://www.loom.com/embed/175b3f8c5c954460a92af7cd8afc5605"
+    frameborder="0"
+    webkitallowfullscreen
+    mozallowfullscreen
+    allowfullscreen
+    style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%' }}
+  ></iframe>
+</div>

@@ -1,0 +1,117 @@
+---
+title: 'Map inside JSX. An easy Guide for beginners'
+date: '2021-06-7'
+tags: ['']
+draft: false
+summary: "I assume that have searched for 'how to map in react' or even 'reactjs map', and you find first position the official React blog. However, you still don't understand quite well how React works, JSX and how the map enters to play in this scenario."
+---
+
+Hey there. I assume that have searched for "how to map in react" or even "reactjs map", and you find first position the [official React blog](https://reactjs.org/docs/lists-and-keys.html). However, you still don't understand quite well how React works, JSX and how the map enters to play in this scenario.
+
+If that's not the case ☝🏻, then you may already do a _map inside React_, but somehow you **can't see your data returned on the screen** (it's just blank).
+
+## Map function in JSX
+
+JSX is like HTML in JavaScript right? Well, you've heard is not like that, but in my opinion is exactly that. But yeah, when you need to put something that is not HTML, like a map function or some console.log, how you do it? **You write brackets**.
+
+```jsx
+return (
+	<div
+			{array.map()}
+	</div>
+)
+
+```
+
+## A use case for Map in React
+
+In react, you have two types of components: **Presentational and logical ones.** Presentational are the ones that are to display and more alike the beauty and mockup ones, the ones where you put all your divs and show your layout, while the logical ones are the ones that have functions, conditionals, **map functions,** etc... So, let's say you have a
+
+The idea behind these, is that then is easier for you to test those components if you know which type is each one.
+
+Let's say you have a Rick&Morty, where it displays all the characters of that series of that API. Don't worry this won't go into that, just **we'll go through how we can map across all those characters**.
+
+In this case, we have a component named **Character and the other one named Characters**. The first one is presentational, such is it only in charge of displaying each character and no more, while _Characters_ is in charge of mapping through the data and passing the props to the Character (Characters is the parent)-
+
+```jsx
+Characters.js
+```
+
+```jsx
+characters.map((character) => <Character key={character.id} {...character} />)
+```
+
+_characters_ is all the data that we get from the API, it has some values like _name, id, gender, status_ ...etc of each character.
+I've made an article about what those _three dots_ mean in `{...character}`
+
+```jsx
+Character.js
+```
+
+```jsx
+import { Col, Card, Button } from 'react-bootstrap'
+const Character = ({ name, id, image, gender, species, status, created }) => {
+  return (
+    /* Componente de presentacion y renderizado */
+    <Col md={4} className="mt-3 mb-3">
+      <Card>
+        <Card.Img variant={'top'} src={image} alt="" />
+        <Card.Body>
+          <Card.Title>
+            {name} - {gender}
+          </Card.Title>
+          <Card.Text>
+            <small>{created}</small>
+          </Card.Text>
+        </Card.Body>
+      </Card>
+    </Col>
+  )
+}
+
+export default Character
+```
+
+## The _key rule_ 🔑
+
+Always do apply at the top of your first element a _"key"_ attribute. Remmeber, this has to be unique, so it's ideal for you to add as key values things like _id_.
+
+```jsx
+characters.map((character) => <Character key={character.id} />)
+```
+
+## My map is not showing anything (Common mistake)
+
+Well you might have tried using map in the correct way and you are 100% sure that you are already applied everyting and that nothing's wrong, well... at least that's what you think.
+
+Make sure to always return each element in your map. While this common mistake is not purely React, it is a map error, and in React (at least for me) you are going to use a bunch of times the map function. So in order to not have your app return a blank thing, you should make sure to understand this concept:
+
+This:
+
+```jsx
+characters.map((character) => <Character key={character.id} />)
+```
+
+Is the same as this:
+
+```jsx
+characters.map((character) => {
+  return <Character key={character.id} />
+})
+```
+
+⚠️ But this is not the same: 👇
+
+```jsx
+characters.map((character) => {
+  ;<Character key={character.id} />
+})
+```
+
+You are **not returning anything** in this last example. The parenthesis, in the first example, means an **_implicit return_** while with brackets you are not returning anything and you need to add the word `return` (second example).
+
+So as you can see in the last example we are not returning anything so that might be a reason why you are not seeing your data being shown in your React app, even with no React errors! What a headache.
+
+I hope that after reading this article, you can now begin practicing with various pieces of data, or even components and display them with a map.
+
+A [related article](https://reactshark.vercel.app/blog/make-a-component-reusable) to this one, if you want to read more about **how to make reuseful components with map functions:**
