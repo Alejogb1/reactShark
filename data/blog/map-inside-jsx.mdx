@@ -42,13 +42,13 @@ characters.map((character) => <Character key={character.id} {...character} />)
 ```
 
 _characters_ is all the data that we get from the API, it has some values like _name, id, gender, status_ ...etc of each character.
-I've made an [article](https://reactshark.vercel.app/blog/whatis-three-dots) about what those _three dots_ mean in `{...character}`
+I've made an [article](/blog/what-are-three-dots) about what those _three dots_ mean in `{...character}`
 
 ```jsx
 Character.js
 ```
 
-```jsx
+```js {1, 3-4} showLineNumbers
 import { Col, Card, Button } from 'react-bootstrap'
 const Character = ({ name, id, image, gender, species, status, created }) => {
   return (
@@ -77,7 +77,7 @@ export default Character
 Always do apply at the top of your first element a _"key"_ attribute. Remmeber, this has to be unique, so it's ideal for you to add as key values things like _id_.
 
 ```jsx
-characters.map((character) => <Character key={character.id} />)
+characters.map((character) => <spa<Character key={character.id} />)
 ```
 
 ## My map is not showing anything (Common mistake)
@@ -89,7 +89,7 @@ Make sure to always return each element in your map. While this common mistake i
 This:
 
 ```jsx
-characters.map((character) => <Character key={character.id} />)
+characters.map((character) => (<Character key={character.id}) />)
 ```
 
 Is the same as this:
@@ -114,4 +114,4 @@ So as you can see in the last example we are not returning anything so that migh
 
 I hope that after reading this article, you can now begin practicing with various pieces of data, or even components and display them with a map.
 
-A [related article](https://reactshark.vercel.app/blog/make-a-component-reusable) to this one, if you want to read more about **how to make reuseful components with map functions:**
+A [related article](/blog/make-a-component-reusable) to this one, if you want to read more about **how to make reuseful components with map functions:**
