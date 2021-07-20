@@ -1,0 +1,211 @@
+---
+title: 'The complete guide of setTimeout in React'
+date: '2021-07-20'
+tags: ['useRef', 'Guide', "React"]
+draft: false
+summary: "Basically, using setTimeout in React, you should be able to create a function inside the useEffect hook, or in the case of classes components, inside componenDidMount."
+---
+
+Table of contents
+
+1. How to use setTimeout
+2. What is setTimeout
+3. What are closures? [Why it's useful for when you use setTimeout in React]
+4. Why setTimeout might break your React app
+5. Optimizing requests and network React apps load
+6. How to test setTimeout in React
+
+## How to use setTimeout?
+
+OPTION NUMBER 1: Use it inside useEffect. Don't forget to clear it and apply the hook: `useRef` so you can keep track of your state.
+
+```js
+const countRef = useRef(Notes);
+countRef.current = Notes;
+
+useEffect(() => {
+    setTimeout(() => {
+      setListofNotes(countRef.current)
+    }, 3000);
+    setNotes(/*should use an spread here*/, "Beware of bears"); 
+  }, []);
+}
+```
+
+OPTION 2: Use it for delaying events
+
+Let's say you built a *notification component* *inside your React app* with Chakra UI. Now those notifications should fade away after some time, for this, we're going to use *setTimeout*.
+
+[https://codesandbox.io/embed/settimeout-in-notifications-8xkxj?fontsize=14&hidenavigation=1&theme=dark](https://codesandbox.io/embed/settimeout-in-notifications-8xkxj?fontsize=14&hidenavigation=1&theme=dark)
+
+```js
+<Button colorScheme="blue" onClick={() => setTimeout(addNotification, 3000)}>
+  Upload
+</Button>
+```
+
+🖐🏻 If you don't structure your onClick such as it calls a function, React will return you an error. This is what I mean
+
+✅ `onClick={() ⇒ (setTimeout(myFunction, 1000)}`
+
+❌ `onClick={setTimeout(myFunction, 1000)}`
+
+You can check more about this here: [https://fullstackopen.com/en/part1/a_more_complex_state_debugging_react_apps](https://fullstackopen.com/en/part1/a_more_complex_state_debugging_react_apps)
+
+OPTION 3: Keep reading this article
+
+## What is setTimeout?
+
+I don't make this question just for extending this article and not getting to the point. In fact, to understand the **key behavior that setTimeout has with React states** we should understand that setTimeout is a closure, so if you don't know what this is, then you might run into some issues when implementing it into your React component. 
+
+## What are closures?
+
+I've gone from different resources like [Stack Overflow](https://stackoverflow.com/questions/36636/what-is-a-closure) discussions, blogs, [books,](https://github.com/getify/You-Dont-Know-JS) and [youtube videos](https://youtu.be/xa8lhVwQBw4).
+
+Definition: *"Its a function and its lexical scope"*
+
+In somebody's own words: *Closures are used when you want to write a function that returns another function that does something to the parameters you pass in.*
+
+Remember that the last part: *"does something to the parameters",* means that there is a function inside another function that takes the parameters from the parent, and uses them. Check the following code example.
+
+```js
+function addDogs (x) {
+	function addMoreDogs(y) {
+		return x + y
+	}
+	return x
+}
+
+const createDogs = addDogs(4)
+console.log("There are five dogs: ", createDogs(1))
+
+```
+
+## setTimeout are closures, and why it may break your React app.
+
+Now getting the principal topic of this article, we're going to go through one of the issues you might run when implementing setTimeout into a React app.
+
+1. Be careful when using *setState* with **setTimeout inside *useEffect*. For example:
+
+```js
+import React, { useEffect, useState } from 'react';
+
+const noteAppComponent = () => {
+const [note, setNote] = useState([])
+const [listofNotes, setListofNotes] = useState([])
+
+useEffect(() => {
+    setTimeout(() => {
+      setListofNotes(addNote)
+    }, 3000);
+    setNote({...Notes}, {message: "Beware of bears"}); 
+  }, []);
+}
+```
+
+This won't work as you would like to, such as *setTimout* is a closure so *setListofNotes* is using a closure to grab the *addNote* value. 
+So to fix that, you need to use more of a **global wrapper** for the *Note* value, don't use the *setTimeout*. 
+**The solution would be to apply `useRef`**
+
+```js
+const countRef = useRef(Notes);
+countRef.current = Notes;
+
+useEffect(() => {
+    setTimeout(() => {
+      setListofNotes(countRef.current)
+    }, 3000);
+    setNotes({...Notes}, {message: "Beware of bears"}); 
+  }, []);
+}
+```
+
+This section was made thanks to the following discussion:
+
+[https://github.com/facebook/react/issues/14010](https://github.com/facebook/react/issues/14010)
+
+## 🧼Another use case: 
+Optimizing requests and reducing network load
+
+In the following example, I'm going to show you a **simple search bar component,** which has one issue: it fetches the product that the user searches too many times, like, a l.o.t.
+
+Among the things, I've seen about using setTimeout and its practical use cases.
+
+**One is for optimizing search bars**. Yep, that's what I've seen.
+
+[https://codesandbox.io/embed/settimeout-data-fetching-5lt7h?fontsize=14&hidenavigation=1&theme=dark](https://codesandbox.io/embed/settimeout-data-fetching-5lt7h?fontsize=14&hidenavigation=1&theme=dark)
+
+```js
+export default function App() {
+  const [searchedProduct, setSearchProduct] = useState("");
+  const [products, setProducts] = useState([]);
+  const fetchProducts = () => {
+    console.log("fetching product");
+  };
+  useEffect(() => {
+    fetchProducts();
+  }, [searchedProduct]);
+  const handleSearch = (e) => {
+    setSearchProduct(e.target.value);
+  };
+  return (
+    <div className="App">
+      <form action="/" method="get">
+        <input
+          type="text"
+          id="header-search"
+          placeholder="Search for products"
+          value={searchedProduct}
+          onChange={handleSearch}
+        />
+        <button type="submit">Search</button>
+      </form>
+    </div>
+  );
+}
+```
+
+***TOO MANY FETCH CYCLES***
+
+If you go and open the app that is showing up there, open the console, you'll see that whenever we type for example: "MacBook m1", you'll see that you get **5 times** the console message *"fetching product*"**!** this is clearly not ecologic. We want to do the fetch once, or at least the less possible amount of times, and not on every word we type. 
+
+That code is to give an example that where the `console.log("fetching product")` is, there could be a fetching method getting the product that you have typed, like on any eCommerce. 
+
+The reason why there the *console.log* executes every time the person writes any word, its because the *useEffect*, which as you might know it mounts (renders) the component and decides when to do so by taking into account the state or variable, that's inside the `[]`, and so, in this case, *useEffect* is attached to the state: *`searchedProduct`,* and the state changes every time we type something.
+
+ `useEffect(() => {fetchProducts();}, [searchedProduct]);` Is it better now?
+
+ ***WE SOLVE IT BY USING SETTIMEOUT***
+
+While the following doesn't solve the problem, you are directed towards a proper solution.
+
+```js
+useEffect(() => {
+    setTimeout(() => {
+      fetchProducts();
+    }, 2000);
+  }, [searchedProduct]);
+```
+
+With that code you'll still have a lot of requests, since you are only delaying those. **To fix that, you should apply `clearTimeout`**
+
+```jsx
+useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchProducts();
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [searchedProduct]);
+```
+
+## How to test setTimeout in Reactjs
+
+For this section, I've watched the 40 minutes awesome [Kent C Dodds video titled: *"How to Test a Custom React Hook](https://youtu.be/PKUDcLGn-80) (that uses setTimeout)"*
+
+- He mentions that he doesn't like to use setTimeout in tests, so he uses libraries to check on the DOM, to whether the setTimeout has affected or not the component, and by doing that test the custom hook. That's what I've understood, I would recommend giving that [video](https://youtu.be/PKUDcLGn-80) a try.
+
+While you can check how the master does the tests, this section will remain incomplete, maybe I'll add something later on when I grab this topic better. 
+
+### When s**hould I use setTimeout?**
+
+**Answer**: Are you looking to delay the load of your component? Then **apply useEffect with setTimeout.**
