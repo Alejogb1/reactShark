@@ -1,0 +1,103 @@
+---
+title: 'Custom hooks or normal functions?'
+date: '2021-06-14'
+tags: ['React', 'Vercel']
+draft: false
+summary: "A Custom Hook is a function you create for a component or a page in React, that 'function' should start with 'use', such as useFetch."
+---
+
+**A Custom Hook is a function you create for a component or a page in React, that '*function'* should start with *use, such as useFetch.***
+
+You can check the [official blog of React](https://reactjs.org/docs/hooks-custom.html), where they have an explanation to Custom Hooks.
+
+Essentially you are going to be using **useEffect inside your custom hook in order to fetch data**. In other words, you are going to be using a hook inside another one. 
+
+Check this out:
+
+In the following question, I'll play with [React's article about custom hooks](https://reactjs.org/docs/hooks-custom.html), so I recommend checking it out before jumping there. 
+
+## Why use Custom Hooks?
+
+*Hide* complex logic. At least in [the React article](https://reactjs.org/docs/hooks-custom.html), the example they give us is to create a component, then create a custom hook to replace some logic inside it, so you are kind of **hiding the logic.**
+
+Lets check the component with the already added custom hook in this case `useFriendStatus` :
+
+```js
+function FriendListItem(props) {
+  const isOnline = useFriendStatus(props.friend.id);
+
+  return (
+    <li style={{ color: isOnline ? 'green' : 'black' }}>
+      {props.friend.name}
+    </li>
+  );
+}
+```
+
+As you will see down below, there is the same component but with no custom hook which was in this case `useFriendStatus()` 
+
+[![Captura.png](https://i.postimg.cc/8zGhMPCk/Captura.png)](https://postimg.cc/pp0htv83)
+
+That logic that is highlighted, is the actual **logic that the custom hook has inside.**
+
+## **What is the difference between a custom hook and a normal JS function?**
+
+I mean, couldn't have you used a function like `changeFriendStatus()` instead of that custom Hook? Well, let's find out and try it by ourselves.
+
+Here we have this app, where I've to create two buttons, one using the custom Hook `useToggle`, btw if you are looking for Custom Hooks examples you should genuinely check [this article](https://usehooks.com/).
+
+[https://codesandbox.io/embed/custom-hooks-vs-functions-r2jfq?fontsize=14&hidenavigation=1&theme=dark](https://codesandbox.io/embed/custom-hooks-vs-functions-r2jfq?fontsize=14&hidenavigation=1&theme=dark)
+
+**Custom hook**
+
+```js
+const useToggle = (initialState = false) => {
+    const [state, setState] = useState(initialState);
+
+    const toggle = useCallback(() => setState((state) => !state), []);
+
+    return [state, toggle];
+  };
+
+  const [isLightChanged, setLightChanged] = useToggle();
+
+  return (
+    <div className="App">
+      <button onClick={setLightChanged}>Switch with custom hook</button>
+      <p>{isLightChanged ? "On" : "Off"}</p>
+    </div>
+```
+
+**Normal JS function?**
+
+```js
+function useToggle(initialState = false) {
+    const [state, setState] = useState(initialState);
+
+    const toggle = useCallback(() => setState((state) => !state), []);
+
+    return [state, toggle];
+  }
+
+  const [isLightChanged, setLightChanged] = useToggle();
+
+  return (
+    <div className="App">
+      <button onClick={setLightChanged}>Switch with Function</button>
+      <p>{isLightChanged ? "On" : "Off"}</p>
+    </div>
+  );
+```
+
+⚠️ Wait! This last piece of code is not a normal JavaScript function, it is a Custom Hook, such it is stateful and we are using other react hooks inside it. In normal JavaScript you can't manage states inside a function.
+
+I would be asking the same thing but the importance relies on the essential difference between a hook and a function, such as one definition of a hook is that is a function. So in order to understand what separates them. We should take a look at the following point:
+
+**Normal functions re-render while hooks don't**
+
+This means that we **can't save our current state** in a normal function**.**
+
+To understand what I'm saying, let's take the case where you implement useState, you know that **whenever the state changes your component re-renders.** So having this in mind, if somehow managed to create a function to handle your state, when the component re-renders then your function would lose all that information, cause **functions re-render, while hooks not**.
+
+**Remember: Normal functions do not have states inside it**
+**neither other custom hooks**
