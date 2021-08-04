@@ -1,0 +1,89 @@
+---
+title: 'Form submission in react js [2021 Guide]'
+date: '2021-08-04'
+tags: ['react']
+draft: false
+summary: 'If you understand how to do form submissions in JavaScript, you will already know how to do it in Reactjs.'
+---
+So recently I've got a React challenge where I had to create a simple web app which was a newsletter sign-up form made with HTML, CSS/SASS, and JavaScript.
+
+[https://github.com/Alejogb1/email-signup-form/](https://github.com/Alejogb1/email-signup-form/blob/main/index.html)
+
+I've gone from some mistakes, learned some things and now I want to share with you guys what I've learned and try to show you what I know about making post submissions in React. 
+
+## How to do form submissions in React?
+
+If you understand how to do form submissions in JavaScript, you will already know how to do it in Reactjs. 
+
+If you don't know, then follow these three steps: 
+
+**1) Create a function to POST your data 2) Inside that function create a fetch HTTP request with a POST method, headers accepting JSON, and on the body, the data you want to send 3) Final step, create a form with an onSubmit pointing to the function you've just created** 
+
+```js
+async function postData() {
+    await fetch("https://www.reactshark.com/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email: document.querySelector("#newsletter-email").textContent
+      })
+    });
+  }
+  return (
+    <>
+      <h2>Learn to Make a POST submission</h2>
+      <form onsubmit="postData()">
+        <label>Subscribe to the newsletter</label>
+        <input id="newsletter-email"></input>
+      </form>
+		</>
+)
+```
+
+## 🔐 Working with credentials?
+
+This would be the case for most of you including myself. In case that your API asks you to include a credential on your request. That's how you would do it:
+
+```js
+async function postData (){
+    await fetch('https://www.reactshark.com/', {
+      method: 'POST',
+      headers: {
+        'credentials' : 'sh_9f57832f-126b-44f3-888f-8a370b155a18',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({email : document.querySelector("#newsletter-email").textContent })
+    });
+     
+  }
+```
+
+## ⚠️ Avoid using `method` and `action` attributes on your HTML
+
+(at the same time you already have a function doing the POST request)
+
+In the case you are following this tutorial, then using attributes like `method="POST"` or `action="URL/endpoint"` will break your app. (Again, if you have already a function in charge of doing the POST request) 
+
+Because when using a function, in this case, called `postData()` that's being executed on your `onSubmit`, it's not necessary to use other *attributes* on your HTML form. 
+
+Otherwise, **you will be calling 2 times your POST method** and the second call will not have the things that `postData` has. **No *headers*, and no *body***, just the action, and the method.
+
+Using attributes on your HTML might be useful when integrating a third-party service like getForm. You just have to include the endpoint and that's it, there is no need for a postData function.
+
+https://i.postimg.cc/kGv7y60B/Captura.png
+
+
+This section was made and possible thanks to [Ramiro Olivencia](https://github.com/rolivencia)
+
+## An alternative to form submissions in React: Postman
+
+ Postman is a tool to test requests to your server. Instead of creating all the code shown in this article, **you would simply make the request with the Postman** application and that would be it.
+
+Now, I've been having an issue when trying to create a POST request and for some reason, Postman is having trouble making the request. As a consequence, my server doesn't receive any when I press send.
+
+You can check this resource to learn more about using Postman:
+
+[https://fullstackopen.com/en/part3/node_js_and_express#postman](https://fullstackopen.com/en/part3/node_js_and_express#postman)
