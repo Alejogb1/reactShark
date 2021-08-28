@@ -1,0 +1,204 @@
+---
+title: 'Complete guide of Reactjs date format dd/mm/yyyy'
+date: '2021-08-28'
+tags: ['React', 'Guide']
+draft: false
+summary: 'The most clear way to format a date (dd/mm/yyyy) in React is to use the lightweight library: date-fns.'
+---
+
+### Resources I've read to create this article:
+
+- [The Definitive Guide to DateTime Manipulation (Toptal)](https://www.toptal.com/software/definitive-guide-to-datetime-manipulation)
+- [Everything You Need to Know About Date in JavaScript (CSS tricks)](https://css-tricks.com/everything-you-need-to-know-about-date-in-javascript/)
+- [https://www.carlrippon.com/formatting-dates-and-numbers-in-react/](https://www.carlrippon.com/formatting-dates-and-numbers-in-react/)
+
+### Table of contents
+
+1. Solution date-fns
+2. Formatting with native Date js
+3. About momentjs
+4. Exercise
+
+## Intro
+
+So one of the issues is that you have when using `new Date()` (native JS function)
+
+Is that it returns a long unformatted date
+
+Something like: `Mon Aug 09 2021 20:38:05 GMT-0300 (standard time of Argentina)`
+
+You want something much simpler like `Mon, 9 August 2021`
+
+## Solution: Date-fns
+
+You can check the [CodeSandbox](https://codesandbox.io/s/date-fns-03mgi?file=/src/App.js:311-321) of this section.
+
+```jsx
+const data = [
+  {
+    title: 'How to cook',
+    createdAt: new Date(),
+  },
+  {
+    title: 'The complete guide to digital marketing',
+    createdAt: new Date(),
+  },
+]
+export default data
+```
+
+```jsx
+import data from './data'
+import { format } from 'date-fns'
+
+export default function App() {
+  return (
+    <div>
+      <h1>Blog posts</h1>
+      <ul>
+        {data.map((post) => (
+          <li>
+            <h3>{post.title}</h3>
+            <p>{format(post.createdAt, 'dd/mm/yyyy')}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+```
+
+As you will see at the end of this article, **momentjs** which is a well-known library **has been** **deprecated**, which means we have now to use another library
+
+The fact that we are not using Momentjs in this case, doesn't mean that we are now going with the worse option.
+
+Actually, date-fns is much more optimized than momentjs and makes your app much more lightweight.
+
+Basically, **date-fns is modular**, allowing you to only use the functions you'll use. Also, **its size is 44 kb**!
+
+In conclusion, **date-fns performs much better** than momentjs.
+
+## Formatting with native Date js
+
+Here you have an option of just using Date native JavaScript functions to format your date in React.
+
+```jsx
+function formatDate(newDate) {
+  const months = {
+    0: 'January',
+    1: 'February',
+    2: 'March',
+    3: 'April',
+    4: 'May',
+    5: 'June',
+    6: 'July',
+    7: 'August',
+    8: 'September',
+    9: 'October',
+    10: 'November',
+    11: 'December',
+  }
+  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+  const d = newDate
+  const year = d.getFullYear()
+  const date = d.getDate()
+  const monthIndex = d.getMonth()
+  const monthName = months[d.getMonth()]
+  const dayName = days[d.getDay()] // Thu
+
+  const formatted = `${dayName}, ${date} ${monthName} ${year}`
+  return formatted.toString()
+}
+return (
+  <div className="App">
+    <h1>Blog posts</h1>
+    <ul>
+      {data.map((post) => (
+        <li>
+          <h3>{post.title}</h3>
+          <p>{formatDate(post.createdAt)}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+)
+```
+
+You can check the [CodeSandbox](https://codesandbox.io/s/formatting-data-react-newdate-5bl6o) [](https://codesandbox.io/s/date-fns-03mgi?file=/src/App.js:311-321)of this section.
+
+## Want to use international formats?
+
+While this is less flexible, such as you are not formatting the date, you are just initializing your date based on the country standard.
+
+Say you want to use US `(m/d/yyyy)` format
+
+```jsx
+const nowDate = new Date()
+
+const UsFormatter = new Intl.DateTimeFormat('en-US')
+
+console.log(UsFormatter.format(nowDate))
+
+// 8/9/2021
+```
+
+💡 Wait but you can actually **add some customization**
+
+```jsx
+const longEnUSFormatter = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+})
+console.log(longEnUSFormatter.format(firstValentineOfTheDecade))
+// February 14, 2020
+```
+
+## Using Vanilla JavaScript to convert a date
+
+(Stack Overflow version)
+
+```jsx
+let today = new Date()
+
+let date = today.getDate() + '-' + parseInt(today.getMonth() + 1) + '-' + today.getFullYear()
+
+console.log(date)
+```
+
+Go to the console and see how it formats `new Date()`.
+
+## Exercise
+
+Let's say you are creating an app with reusable components.
+
+If you would have to create a Blog app, where you have data about each blog post.
+
+```jsx
+const blogPosts = [
+  {
+    title: 'How to cook',
+    createdAt: new Date(),
+  },
+  {
+    title: 'The complete guide to digital marketing',
+    createdAt: new Date(),
+  },
+]
+```
+
+⚠️ There is a problem with `new Date()`
+
+It returns a l*ong unformatted Date,* and we want short dates with `dd/mm/yyyy` format
+
+_How would you approach formatting dates?_
+
+**Exercise: Create a React app and map the data above and format it**
+
+[Captura.png](https://postimg.cc/yJVTrrg1)
+
+## ⚠️Momentjs is no longer mantained
+
+While making this article I found that momentjs, a library like date-fns or any other to easily do cool stuff with dates, is no longer maintained and there will not be more features.
+
+"We now generally consider Moment to be a legacy project in maintenance mode. It is not dead, but it is indeed done."
