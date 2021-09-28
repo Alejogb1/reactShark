@@ -1,2 +1,6 @@
 User-agent: * 
 Allow: /
+Sitemap: http://www.reactshark.com/sitemap.xml
+Disallow: https://reactshark.com//blob/master/data/blog/
+
+
