@@ -1,5 +1,5 @@
 ---
-title: 'Map inside JSX. An easy Guide for beginners'
+title: 'Map inside JSX [Dynamically render elements]'
 date: '2021-06-7'
 tags: ['react']
 draft: false
@@ -10,14 +10,26 @@ Hey there. I assume that have searched for "how to map in react" or even "reactj
 
 If that's not the case ☝🏻, then you may already do a _map inside React_, but somehow you **can't see your data returned on the screen** (it's just blank).
 
-## Map function in JSX
+## React: use array map to dynamically render elements
 
-JSX is like HTML in JavaScript right? Well, you've heard is not like that, but in my opinion is exactly that. But yeah, when you need to put something that is not HTML, like a map function or some console.log, how you do it? **You write brackets**.
+Map function in JSX
+
+JSX is like HTML in JavaScript right? Well, you've heard is not like that, but in my opinion is exactly that. But yeah, when you need to put something that is not HTML, like a map function or some console.log, how do you do it? **You write brackets**.
+
+First, create your component where you are going to be using a map array:
+
+```jsx
+const App = () => {
+  return <div>Hello there</div>
+}
+```
+
+Then, inside your `return()` function create your map function like this:
 
 ```jsx
 return (
 	<div
-			{array.map()}
+			{array.map( element => <li>{element.id}</li>)}
 	</div>
 )
 
@@ -25,13 +37,29 @@ return (
 
 ## A use case for Map in React
 
-In react, you have two types of components: **Presentational and logical ones.** Presentational are the ones that are to display and more alike the beauty and mockup ones, the ones where you put all your divs and show your layout, while the logical ones are the ones that have functions, conditionals, **map functions,** etc... So, let's say you have a
+In react, you have two types of components: **Presentational and logical ones.**
 
-The idea behind these, is that then is easier for you to test those components if you know which type is each one.
+Presentational are the ones that are to display and more alike the **beauty and mockup** ones,
 
-Let's say you have a Rick&Morty, where it displays all the characters of that series of that API. Don't worry this won't go into that, just **we'll go through how we can map across all those characters**.
+the ones where you put all your divs and show your **layout**,
 
-In this case, we have a component named **Character and the other one named Characters**. The first one is presentational, such is it only in charge of displaying each character and no more, while _Characters_ is in charge of mapping through the data and passing the props to the Character (Characters is the parent)-
+while the logical ones are the ones that have functions, conditionals, **map functions,** etc...
+
+The idea behind these is that then is easier for you to test those components if you know which type is each one.
+
+Let's say you have a Rick&Morty, where it displays all the characters of that series of that API.
+
+Don't worry this won't go into that, just **we'll go through how we can map across all those characters**.
+
+In this case, we have a component named **Character and the other one named Characters**.
+
+The first one is presentational, such is it only in charge of displaying each character and no more,
+
+while _Characters_ is in charge of mapping through the data
+
+and passing the props to the Character
+
+(Characters is the parent)
 
 ```jsx
 Characters.js
@@ -41,14 +69,11 @@ Characters.js
 characters.map((character) => <Character key={character.id} {...character} />)
 ```
 
-_characters_ is all the data that we get from the API, it has some values like _name, id, gender, status_ ...etc of each character.
-I've made an [article](/blog/what-are-three-dots) about what those _three dots_ mean in `{...character}`
-
 ```jsx
 Character.js
 ```
 
-```js {1, 3-4} showLineNumbers
+```jsx
 import { Col, Card, Button } from 'react-bootstrap'
 const Character = ({ name, id, image, gender, species, status, created }) => {
   return (
@@ -74,10 +99,10 @@ export default Character
 
 ## The _key rule_ 🔑
 
-Always do apply at the top of your first element a _"key"_ attribute. Remmeber, this has to be unique, so it's ideal for you to add as key values things like _id_.
+Always do apply at the top of your first element that's being mapped a _"key"_ attribute.
 
 ```jsx
-characters.map((character) => <spa<Character key={character.id} />)
+characters.map((character) => <Character key={character.id} />)
 ```
 
 ## My map is not showing anything (Common mistake)
@@ -89,7 +114,7 @@ Make sure to always return each element in your map. While this common mistake i
 This:
 
 ```jsx
-characters.map((character) => (<Character key={character.id}) />)
+characters.map((character) => <Character key={character.id} />)
 ```
 
 Is the same as this:
@@ -114,4 +139,4 @@ So as you can see in the last example we are not returning anything so that migh
 
 I hope that after reading this article, you can now begin practicing with various pieces of data, or even components and display them with a map.
 
-A [related article](/blog/make-a-component-reusable) to this one, if you want to read more about **how to make reuseful components with map functions:**
+A [related article](https://reactshark.vercel.app/blog/make-a-component-reusable) to this one, if you want to read more about **how to make reuseful components with map functions.**
