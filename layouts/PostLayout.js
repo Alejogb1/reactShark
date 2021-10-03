@@ -4,10 +4,6 @@ import SectionContainer from '@/components/SectionContainer'
 import { BlogSeo } from '@/components/SEO'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
-import ReactGA from 'react-ga';
-const TRACKING_ID = "G-WHNHCVLFCW"; // YOUR_OWN_TRACKING_ID
-ReactGA.initialize(TRACKING_ID);
-
 const editUrl = (fileName) => `${siteMetadata.siteRepo}/blob/master/data/blog/${fileName}`
 const discussUrl = (slug) =>
   `https://mobile.twitter.com/search?q=${encodeURIComponent(
@@ -22,6 +18,12 @@ export default function PostLayout({ children, frontMatter, next, prev }) {
   return (
     <SectionContainer>
       <BlogSeo url={`${siteMetadata.siteUrl}/blog/${frontMatter.slug}`} {...frontMatter} />
+      <head>
+        <meta
+          property="og:image"
+          content={`https://cdn.flyyer.io/r/v2/alejogarciag1/my-project/main?${title}`}
+        ></meta>
+      </head>
       <article>
         <div className="xl:divide-y xl:divide-gray-200 xl:dark:divide-gray-700">
           <header className="pt-6 xl:pb-6">

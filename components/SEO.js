@@ -67,7 +67,7 @@ export const BlogSeo = ({ title, summary, date, lastmod, url, tags, images = [] 
   return (
     <>
       <NextSeo
-        title={`${title} – ${siteMetadata.title}`}
+        title={`${title}`}
         description={summary}
         canonical={url}
         openGraph={{

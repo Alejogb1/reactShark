@@ -16,6 +16,12 @@ export async function getStaticProps() {
 export default function Home({ posts }) {
   return (
     <>
+      <head>
+        <meta
+          property="og:image"
+          content={`https://cdn.flyyer.io/r/v2/alejogarciag1/my-project/main?${siteMetadata.title}`}
+        ></meta>
+      </head>
       <PageSeo
         title={siteMetadata.title}
         description={siteMetadata.description}
