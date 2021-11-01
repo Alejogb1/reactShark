@@ -1,0 +1,79 @@
+---
+title: 'React security and Cross-Site Scripting (XSS)'
+date: '2021-10-31'
+tags: ['security']
+draft: false
+summary: 'In this article, we are going to see an overview of how you can secure a React app, and what are some vulnerabilities that your DOM might have.'
+---
+
+**Outline**:
+
+1. Introduction
+2. How to secure a React app
+3. XSS Protection
+4. Your react app into a bounty program
+
+## Introduction
+
+In this article, we are going to see an overview of how you can secure a React app, and what are some vulnerabilities that your DOM might have.
+
+Also, I'm going to introduce you to the top 10 vulnerabilities, presented by the Owasp foundation, which is "a broad consensus about the **most critical security risks to web applications**."
+
+## How to secure a React app?
+
+After asking an expert in this field who teaches cybersecurity to companies. He told me to go and check the [Top 10 Web Application Security Risks by Owasp](https://owasp.org/www-project-top-ten/) article. I think it's a good way to have at least something to guide on in the complexity of this subject.
+
+The reality is that React in itself is not close to being the problem when it comes to web security. The practices and techniques are what make a web app more secure.
+
+As I'm beginning as well with the topic of web security, I find this article as note-taking, and I'm more than open to receiving some constructive feedback from experts in the field.
+
+In order to understand how you can secure your React app, you need to understand that there are two types in your web app security:
+
+1. Client-side
+2. Server-side
+
+Most resources say that the server-side is in its majority more important than the client-side.
+
+In the case of a React application, this can happen when you are creating some type of input that maliciously controls your DOM via some vulnerability.
+
+### Cross-Site Scripting (XSS)
+
+XSS is a web security vulnerability where the attacker might be able to gain full control over all of the application's functionality and data.
+
+We should take special care of DOM-based cross-site scripting.
+
+A developer that worked for Trello, once [found a vulnerability in HackerOne](http://danlec.com/blog/xss-via-a-spoofed-react-element), which is a React app.
+
+He found that HackerOne was using React.createElement() and the children that were being passed to it could potentially be violated.
+
+```
+return <div>{input_value}</div>
+```
+
+That code, represents a React.createElement(), to which the argument is React.createElement("div", null, input_value)
+
+While the input value expected was a string, there was also the possibility to pass an object, which was a _children_ to React.createElement. So in order, to create an ethical attack, this developer passed an object, with a dangerouslySetInnerHTML that allowed him to create the exact HTML code he wanted in the app.
+
+## Why React can be secure by itself?
+
+Because of data binding to show only text content instead of some malicious code. In other words, as you don't want the attacker to inject a payload and get full control of your application, React escapes ANY value that is not textContent by using data binding (i.e {}).
+
+```
+<span>{data}</span>
+```
+
+It's not a good practice to include data binding that will allow controlling your input like this:
+
+```
+<a href={data}>Search</a>
+```
+
+**Injectable attributes**
+
+When you capture some user data and then attach that data to some form of action, or some link href, you can be vulnerable to javascript code, that your app will interpret as so, instead of simple data.
+
+But this is not the case with React, when you try to pass some data as code, React simply views it as text. Not allowing the potential attacker to inject malicious code.
+
+## Introduce your react app to a bounty program
+
+Get feedback immediately from a trusted source of ethical hackers, that are going to find potential risks on your web app and send them to you in order to improve your app security.

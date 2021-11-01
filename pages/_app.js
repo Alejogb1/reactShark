@@ -8,9 +8,6 @@ import Head from 'next/head'
 import { SEO } from '@/components/SEO'
 import LayoutWrapper from '@/components/LayoutWrapper'
 import MDXComponents from '@/components/MDXComponents'
-import ReactGA from 'react-ga';
-const TRACKING_ID = "G-WHNHCVLFCW"; // YOUR_OWN_TRACKING_ID
-ReactGA.initialize(TRACKING_ID);
 
 export default function App({ Component, pageProps }) {
   return (
