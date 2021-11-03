@@ -1,0 +1,77 @@
+---
+title: 'How to install GA in React (Easiest way in 2021)'
+date: '2021-11-3'
+tags: ['SEO']
+draft: false
+summary: 'The most clear way to format a date (dd/mm/yyyy) in React is to use the lightweight library: date-fns.'
+---
+
+## Introduction
+
+I'm very excited to be writing this article, such as it is coming from one of my favorite topics, which apart from being React, is Search Engine Optimization.
+
+Google Analytics is the key step for any SEO process.
+
+It is used to track conversions, look at demographics, and events.
+
+It also helps keep track of how your traffic is behaving.
+
+The idea behind GA is to have a solid understanding of not only knowing how many visitors do you have, but also why they are on your website, and what are they doing there.
+
+Having said that I'm going to show you the EASIEST way, for you to install GA in a React app and start tracking visitors accordingly.
+
+A little caution with this method is that you may not want to use this for the long run or use it for big web apps.
+
+Ideally, this article is for those who **just want to have GA in their React app**, and don't want to spend more than 5 minutes in the process.
+
+## How to install Google Analytics in React.js (Easiest way)
+
+**First step:** Get your Global site tag (gtag.js)
+
+Go to your Google Analytics account
+
+And search for _Data Streams,_ and click on it
+
+[![Screen capture of Data Streams](https://i.postimg.cc/s2t4xPv2/Captura.png)](https://postimg.cc/NykHPH8h)
+
+Click on your data stream
+
+[![Image of data stream](https://i.postimg.cc/wBv9MJnn/Captura.png)](https://postimg.cc/75pFQCHN)
+A copy your `gtag.js`
+
+[![Gtag screen capture in GA](https://i.postimg.cc/mgQGrjdd/Captura.png)](https://postimg.cc/jDd1gHYN)
+
+**Second step**: Paste the `g.tag.js` inside `index.html` (located in the public folder)
+
+Do you know the public folder when you do `npx create-react-app`?
+
+Well, what we are going to do is to paste the exact script that Google Analytics gives us, and paste it in our index.html inside our public folder.
+
+[![Folder structure screenshot](https://i.postimg.cc/cLsM248F/Captura.png)](https://postimg.cc/dLxyTF6C)
+Inside `index.html` we are going to paste the exact `g.tag` code at that GA gave to us:
+
+```js
+<html>
+<body>
+   ...
+ </body>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-****"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'GA-CODE');
+</script>
+</html>
+```
+
+So in some sense, we are not going to be working with JSX, and you can even say without React.
+
+## The issue with this method
+
+This technique will allow you to install GA in a really simple and bugless manner.
+
+It is dead simple, and for **landing pages made with React**, I think it works great.
+
+But for a blog like this one or even a full web app you might need to go the `react-ga` route.
