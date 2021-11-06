@@ -6,7 +6,7 @@ const useGaTracker = () => {
   const [initialized, setInitialized] = useState(false)
 
   useEffect(() => {
-    if (!window.location.href.includes('localhost')) {
+    if (!window?.location.href.includes('localhost')) {
       ReactGA.initialize('G-5FB80KJR26')
       setInitialized(true)
     }

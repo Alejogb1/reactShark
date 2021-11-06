@@ -1,8 +1,10 @@
 import siteMetadata from '@/data/siteMetadata'
 import SocialIcon from '@/components/social-icons'
 import { PageSeo } from '@/components/SEO'
+import useGaTracker from 'customHooks/useGaTracker'
 
 export default function About() {
+  useGaTracker()
   return (
     <>
       <PageSeo
