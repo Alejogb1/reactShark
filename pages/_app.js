@@ -9,8 +9,7 @@ import { SEO } from '@/components/SEO'
 import LayoutWrapper from '@/components/LayoutWrapper'
 import MDXComponents from '@/components/MDXComponents'
 import { useLocation } from 'react-router-dom'
-import ReactGA from 'react-ga'
-import useGaTracker from 'customHooks/useGaTracker'
+
 export default function App({ Component, pageProps }) {
   return (
     <ThemeProvider attribute="class">
