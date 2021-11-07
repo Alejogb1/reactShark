@@ -10,7 +10,7 @@ For instance, you migh feel stucked when trying to implement localStorage into y
 
 ## localStorage in React
 
-```jsx
+```js
 const [email, setEmail] = useState('')
 
 localStorage.setItem('email', email)
@@ -20,7 +20,7 @@ This should work. Here we are asking our localStorage to save some info by using
 
 ### - In practice, building a form.
 
-```jsx
+```js
 import './styles.css'
 import { useState } from 'react'
 
@@ -50,7 +50,7 @@ Here we reload the app but theres still our email data saved in Local Storage.
 
 You have a birthday app with some dates here and there.
 
-```jsx
+```js
 useEffect(() => {
   let data = localStorage.getItem('dates')
   if (data != null) {
