@@ -23,6 +23,19 @@ export default function App({ Component, pageProps }) {
           <Component {...pageProps} />
         </LayoutWrapper>
       </MDXProvider>
+      <script async src={`https://www.googletagmanager.com/gtag/js?id=G-5FB80KJR26`} />
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-5FB80KJR26', {
+              page_path: window.location.pathname,
+            });
+          `,
+        }}
+      />
     </ThemeProvider>
   )
 }
