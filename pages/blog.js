@@ -14,7 +14,7 @@ export default function Blog({ posts }) {
   return (
     <>
       <PageSeo
-        title={`Blog - `}
+        title={``}
         description={siteMetadata.description}
         url={`${siteMetadata.siteUrl}/blog`}
       />

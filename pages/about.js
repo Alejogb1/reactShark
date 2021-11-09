@@ -4,7 +4,6 @@ import { PageSeo } from '@/components/SEO'
 import useGaTracker from 'customHooks/useGaTracker'
 
 export default function About() {
-  useGaTracker()
   return (
     <>
       <PageSeo
@@ -37,16 +36,8 @@ export default function About() {
           </div>
           <div className="pt-8 pb-8 prose dark:prose-dark max-w-none xl:col-span-2">
             <p>My name is Alejo and I'm trying to create a blog.</p>
-            <p>
-              He leads the clean energy group which develops 3D air pollution-climate models, writes
-              differential equation solvers, and manufactures titanium plated air ballons. In his
-              free time he bakes raspberry pi.
-            </p>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed neque elit, tristique
-              placerat feugiat ac, facilisis vitae arcu. Proin eget egestas augue. Praesent ut sem
-              nec arcu pellentesque aliquet. Duis dapibus diam vel metus tempus vulputate.
-            </p>
+            <p>I'm passionate about SaaS, building digital assets, and mostly React.js</p>
+            <p>Also I do work as an SEO strategist in a freelance manner.</p>
           </div>
         </div>
       </div>

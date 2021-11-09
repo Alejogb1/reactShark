@@ -1,0 +1,72 @@
+---
+title: 'How to add Script tag in JSX (Google Analytics edition)'
+date: '2021-11-09'
+tags: ['React']
+draft: false
+summary: 'In this article you will learn how to add a script tag into React, the given example will be Google Analytics.'
+---
+
+## Introduction
+
+In this article, we are going to be creating a JavaScript file.
+
+Then we are going to try to import that `js` file as a script tag (in our React component).
+
+## Does script tag exist in JSX?
+
+Yes, by default you can add the closing tag `<script/>`, and then you can import the src javascript file.
+
+The only downside is that **you won't be able to add code between the script tags**, as you would do with an HTML file. But you can call a script which will call that function.
+
+## How to add a Script tag in JSX?
+
+1. **First solution:**
+
+If you want to only and exclusively import a script tag.
+
+Then you can do the following:
+
+```js
+import scriptTag from './scriptTag'
+
+export default function App() {
+  return (
+    <div>
+      <script src={scriptTag} />
+    </div>
+  )
+}
+```
+
+```js
+// scriptTag.js
+
+function scriptTag() {
+  console.log('Script Tag has been imported correctly.')
+}
+scriptTag()
+```
+
+Think on this for a second, and then realize that with that method is all you need. No react helment, and no dependencies. Whether you are trying to add a live chat or Google Analytics into your React app, you can add all the necessary script code in the scriptTag function.
+
+## dangerouslySetInnerHTML
+
+Another way to easily add a script tag in JSX, that doesn't require you to import a package but is setting your application to a potential vulnerability is by using `dangerouslySetInnerHTML`.
+
+In this case we are going to be adding Google Analytics with this method:
+
+```js
+<script async src={`https://www.googletagmanager.com/gtag/js?id=G-****`} />
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-****', {
+              page_path: window.location.pathname,
+            });
+          `,
+        }}
+      />
+```
