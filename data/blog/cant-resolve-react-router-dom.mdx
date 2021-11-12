@@ -1,0 +1,51 @@
+---
+title: "How to fix: Can't resolve react router dom"
+date: '2021-11-12'
+tags: ['React']
+draft: false
+summary: "Can't resolve react-router-dom in most cases refers to an installation problem in your React app."
+---
+
+## Fixing "**Can't resolve react router dom**"
+
+It's `react-router-dom`, not react-dom
+
+If you've made sure you have installed the correct dependency.
+
+But still keep seeing that error then do:
+
+`npm install react-router-dom --save`
+
+or
+
+`npm install -S react-router-dom`
+
+**Why that works?**
+
+The `—-save` option creates a dev dependency on your `package.json` file, which at the same time of solving this error for you, will allow you to automatically install that dependency in other computers and locations.
+
+## Update NPM to version 5
+
+"Before version 5, NPM simply installed a package under `node_modules` by default. When you were trying to install dependencies for your app/module, you would need to first install them, and then add them (along with the appropriate version number) to the `dependencies` section of your `package.json`." Read more [here](https://stackoverflow.com/questions/19578796/what-is-the-save-option-for-npm-install).
+
+If you want to solve that kind of issues, like _Can't resolve to react router dom_ or even _Can't resolve axios_, then update NPM to the latest version by doing:
+
+`npm update -g`
+
+## Understanding the nature of this error
+
+Can't resolve in most cases refers to an installation problem in your React app.
+
+And it's the common case that you don't have the dependency you are trying to use.
+
+```jsx
+import { Link } from 'react-router-dom'
+```
+
+One easy way to check if you have installed a dependency, in VS Code, is to press `ctrl + left click` on the `"react-router-dom"` words. If you get redirected to the origin, node_modules file of the dependency, then it's been installed, if not, correct that, install it again using the previous techniques.
+
+## Using TypeScript?
+
+When using Typescript for a React project, you need to run the following command:
+
+`npm i @types/react-router-dom`
