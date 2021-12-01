@@ -26,13 +26,19 @@ I've been working on a project with my brother. Basically, it is a React app tha
 
 Basically, the app had a page where it brought a prop, and then we would go to another page, and then when we went back to it, that prop would be gone, leaving that page with no info (which was the prop's purpose to not do so).
 
+![image 1](/static/images/react_memo_fixabug_image_1.png)
+
+![image 2](/static/images/react_memo_fixabug_image_2.png)
+
+![image 3](/static/images/react_memo_fixabug_image_3.png)
+
 Another example is on headers. In one of my [articles where I make a walkthrough on a frontend project](https://reactshark.vercel.app/blog/frontend-api-project), React.memo() is being used for the search bar. The reason is that the header or search bar is a common component across the entire app, so it's not necessary for it to get re-rendered every time something else changes.
 
 ### How to use it?
 
 You don't need an extra dependency, React.memo comes with React. So in order to add React.memo() in your component you should add it at the top:
 
-```jsx
+```js
 import {React} from "react"
 
 const Header = React.memo( handlerSearch ) => {}
@@ -40,7 +46,7 @@ const Header = React.memo( handlerSearch ) => {}
 
 For classes components:
 
-```jsx
+```js
 import { React } from 'react'
 
 export default React.memo(Header)
