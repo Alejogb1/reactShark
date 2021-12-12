@@ -1,0 +1,294 @@
+---
+title: 'Form Refactoring with useReducer React Hook (mini guide)'
+date: '2021-12-12'
+tags: ['react']
+draft: false
+summary: 'In this article, you are going to see a practical approach on how you can implement useReducer, and it also introduces the idea of reducer.'
+---
+
+In this article, you are going to see a practical approach on how you can implement useReducer React hook,
+and it also introduces the idea of reducer, so it's beginner-friendly!
+
+So we have this form
+
+```js
+import { FormControl, FormLabel, FormHelperText, Input, Button } from '@chakra-ui/react'
+const Form = () => {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  return (
+    <FormControl id="form" p={50}>
+      <FormLabel>First and last name</FormLabel>
+      <Input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+      <FormLabel>Email address</FormLabel>
+      <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+      <FormHelperText>We'll never share your email.</FormHelperText>
+      <FormLabel>Password</FormLabel>
+      <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+      <Button mt={4} colorScheme="teal" type="submit">
+        Login
+      </Button>
+    </FormControl>
+  )
+}
+export default Form
+```
+
+We are using Chakra UI, a React library, and in case you don't know how to install it, go [here](https://chakra-ui.com/docs/getting-started).
+
+So the first thing we want to do is to create our initialState.
+
+This will be an object containing our 3 states: `name`, `email` and `password`.
+
+```js
+const initialState = {
+  name : '',
+  email : '',
+  password : ''
+}
+
+const Form = () => {
+...
+}
+```
+
+Now import the `useReducer` hook
+
+```js
+import { useState, useReducer } from 'react'
+```
+
+So here comes the new part for you if you are just learning the concept of reducer.
+
+We are going to create a separate file called `reducer.js` where it will have a function that handles our state.
+
+```js
+// reducer.js
+
+function reducer(state, action) {}
+```
+
+As you can see we take two parameters:
+
+1. `state` this will be the state we receive from the dispatch method that was executed in our case from `App.js`
+2. `action` someone calls it the `actionObject` because when dispatched it looks like this:
+
+```js
+const action = {
+    type: 'FETCH'
+		data : "Alejo"
+  };
+```
+
+Continuing with the reducer function, now lets build our `switch` cases
+
+```js
+function reducer(state, action) {
+  switch (action.type) {
+    case 'UPDATE':
+      return {
+        ...state,
+        [action.key]: action.value,
+      }
+    default:
+      return state
+  }
+}
+```
+
+So what's going on here?
+
+**The switch statement**, which will be in charge of aligning the `action.type` to the changes the reducer is going to implement. In other words, the switch will determine those changes like modifying the state BASED on the value of the `action.type`
+
+Are you getting it now?
+
+**The spread operator** is `...state` and what it does is basically copying the entire state, in order to only modify only the `[action.key] : action.value`
+
+Having explained the above, now let's add the reducer function into the `App.js` component
+
+```js
+import reducer from "./reducer"
+import { useState, useReducer } from "react";
+
+const initialState = {
+  name: "",
+  email: "",
+  password: ""
+};
+
+const Form = () => {
+// const [name, setName] = useState("");
+// const [email, setEmail] = useState("");
+// const [password, setPassword] = useState("");
+
+const [reducerState, dispatch] = useReducer(reducer, initialState);
+
+...
+}
+```
+
+Following that we are going to change value of our input from the `useState`, to the `initialState` and change the `onChange` setting state functions to the reducer ones using _dispatch_.
+
+```js
+<Input
+  type="text"
+  value={reducerState.name}
+  onChange={(e) =>
+    dispatch({
+      type: 'UPDATE',
+      value: e.target.value,
+      key: 'name',
+    })
+  }
+/>
+```
+
+```js
+<Input
+  type="email"
+  value={reducerState.email}
+  onChange={(e) =>
+    dispatch({
+      type: 'UPDATE',
+      value: e.target.value,
+      key: 'email',
+    })
+  }
+/>
+```
+
+```js
+<Input
+  type="password"
+  value={reducerState.password}
+  onChange={(e) =>
+    dispatch({
+      type: 'UPDATE',
+      value: e.target.value,
+      key: 'password',
+    })
+  }
+/>
+```
+
+### Final step
+
+Let's create a `console.log` inside a `submit()` function, so we get to see the complete state from the reducer, and confirm that we have refactored the form successfully:
+
+```js
+const Form = () => {
+
+  function submit() {
+    console.log({
+      name: reducerState.name,
+      email: reducerState.email,
+      password: reducerState.password
+    });
+  }
+  return (
+		  ...
+      <Button onClick={() => submit()} mt={4} colorScheme="teal" type="submit">
+        Login
+      </Button>
+  );
+};
+export default Form;
+```
+
+OUTPUT:
+
+`{name: 'asadsasd', email: 'adsda@gmail.com', password: 'sadadada'}`
+
+Success! Now you have a React form working with `useReducer`
+
+## Complete refactored form code:
+
+Couldn't post a Github repo, but cou can check its [CodeSandbox](https://codesandbox.io/s/form-react-usereducer-gwu19).
+
+```js
+// App.js
+import { FormControl, FormLabel, FormHelperText, Input, Button } from '@chakra-ui/react'
+import reducer from './reducer'
+import { useState, useReducer } from 'react'
+const initialState = {
+  name: '',
+  email: '',
+  password: '',
+}
+
+const Form = () => {
+  const [reducerState, dispatch] = useReducer(reducer, initialState)
+
+  function submit() {
+    console.log({
+      name: reducerState.name,
+      email: reducerState.email,
+      password: reducerState.password,
+    })
+  }
+  return (
+    <FormControl id="form" p={50}>
+      <FormLabel>First and last name</FormLabel>
+      <Input
+        type="text"
+        value={reducerState.name}
+        onChange={(e) =>
+          dispatch({
+            type: 'UPDATE',
+            value: e.target.value,
+            key: 'name',
+          })
+        }
+      />
+      <FormLabel>Email address</FormLabel>
+      <Input
+        type="email"
+        value={reducerState.email}
+        onChange={(e) =>
+          dispatch({
+            type: 'UPDATE',
+            value: e.target.value,
+            key: 'email',
+          })
+        }
+      />
+      <FormHelperText>We'll never share your email.</FormHelperText>
+      <FormLabel>Password</FormLabel>
+      <Input
+        type="password"
+        value={reducerState.password}
+        onChange={(e) =>
+          dispatch({
+            type: 'UPDATE',
+            value: e.target.value,
+            key: 'password',
+          })
+        }
+      />
+      <Button onClick={() => submit()} mt={4} colorScheme="teal" type="submit">
+        Login
+      </Button>
+    </FormControl>
+  )
+}
+export default Form
+```
+
+```js
+// reducer.js
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'UPDATE':
+      return {
+        ...state,
+        [action.key]: action.value,
+      }
+    default:
+      return state
+  }
+}
+export default reducer
+```
