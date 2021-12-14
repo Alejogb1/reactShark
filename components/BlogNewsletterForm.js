@@ -1,7 +1,7 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import siteMetadata from '@/data/siteMetadata'
-
+import { supabase } from '../supabaseClient'
 const NewsletterForm = ({ title = 'Subscribe to the newsletter' }) => {
   const inputEl = useRef(null)
   const [error, setError] = useState(false)
@@ -11,58 +11,41 @@ const NewsletterForm = ({ title = 'Subscribe to the newsletter' }) => {
   const subscribe = async (e) => {
     e.preventDefault()
 
-    const res = await fetch(`/api/${siteMetadata.newsletter.provider}`, {
-      body: JSON.stringify({
-        email: inputEl.current.value,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-    })
-
-    const { error } = await res.json()
+    const submit = async () => {}
     if (error) {
       setError(true)
       setMessage('Your e-mail address is invalid or you are already subscribed!')
       return
     }
 
+    const supabaseValue = inputEl.current.value
+
     inputEl.current.value = ''
     setError(false)
     setSubscribed(true)
+    const { error, data } = supabase.from('newsletter_rs').insert([supabaseValue])
+
     setMessage('Successfully! 🎉 You are now subscribed.')
   }
 
   return (
     <div>
       <div className="pb-1 text-lg font-semibold text-gray-800 dark:text-gray-100">{title}</div>
-      <form className="flex flex-col sm:flex-row" onSubmit={subscribe}>
-        <div>
-          <label className="sr-only" htmlFor="email-input">
-            Email address
-          </label>
-          <input
-            autoComplete="email"
-            className="px-4 rounded-md w-72 dark:bg-black focus:outline-none focus:ring-2 focus:border-transparent focus:ring-primary-600"
-            id="email-input"
-            name="email"
-            placeholder={subscribed ? "You're subscribed !  🎉" : 'Enter your email'}
-            ref={inputEl}
-            required
-            type="email"
-            disabled={subscribed}
-          />
-        </div>
+      <form
+        className="flex flex-col sm:flex-row"
+        method="POST"
+        action="https://429c8f9b.sibforms.com/serve/MUIEAN0ny4nCo3dYSC4r-K3lrYN14smZ9D_cdQuep5KY9Ba8DLn6i8m1L1F6ISBFTDbqva7u5d1_8gAfCv6D1dq9CF94g-aLjMSuyg2m5WOpTgQUZb_UVqBLVF9KeJsYXGcKHrH381_rZ5zt8iKxWpKogGZsx3DlyLoqYug4W60crk_4zvn1utByQLExuESZRgJBGK4_hZufvfig"
+      >
         <div className="flex w-full mt-2 rounded-md shadow-sm sm:mt-0 sm:ml-3">
           <button
-            className={`py-2 sm:py-0 w-full bg-primary-500 px-4 rounded-md font-medium text-white ${
-              subscribed ? 'cursor-default' : 'hover:bg-primary-700 dark:hover:bg-primary-400'
+            style={{ backgroundColor: 'blue' }}
+            className={`py-2 sm:py-0 w-full bg-orange-500 px-4 rounded-md font-medium text-white ${
+              subscribed ? 'cursor-default' : 'hover:bg-orange-700 dark:hover:bg-orange-400'
             } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-600 dark:ring-offset-black`}
             type="submit"
             disabled={subscribed}
           >
-            {subscribed ? 'Thank you!' : 'Sign up'}
+            {subscribed ? 'Thank you!' : 'Go to sign up'}
           </button>
         </div>
       </form>

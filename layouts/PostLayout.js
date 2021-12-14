@@ -5,7 +5,7 @@ import { BlogSeo } from '@/components/SEO'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import useGaTracker from 'customHooks/useGaTracker'
-
+import FormNeswletter from '../components/BlogNewsletterForm'
 const editUrl = (fileName) => `${siteMetadata.siteRepo}/blob/master/data/blog/${fileName}`
 const discussUrl = (slug) =>
   `https://mobile.twitter.com/search?q=${encodeURIComponent(
@@ -120,6 +120,7 @@ export default function PostLayout({ children, frontMatter, next, prev }) {
                     )}
                   </div>
                 )}
+                <FormNeswletter />
               </div>
               <div className="pt-4 xl:pt-8">
                 <Link
