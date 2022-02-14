@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
 import siteMetadata from '@/data/siteMetadata'
-import { supabase } from '../supabaseClient'
 const NewsletterForm = ({ title = 'Subscribe to the newsletter' }) => {
   const inputEl = useRef(null)
   const [error, setError] = useState(false)
