@@ -40,7 +40,9 @@ const NewsletterForm = ({ title = 'Want me to write articles for your SaaS?' }) 
             type="submit"
             disabled={subscribed}
           >
-            Complete form
+            <a href="https://forms.gle/AvvUKc1tdEyUXWhy6" target="blank">
+              Complete form
+            </a>
           </button>
         </div>
       </div>
