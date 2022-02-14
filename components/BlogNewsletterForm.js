@@ -28,15 +28,13 @@ const NewsletterForm = ({ title = 'Want me to write articles for your SaaS?' }) 
   }
 
   return (
-    <div>
-      <div className="pb-1 text-lg font-semibold text-gray-800 dark:text-gray-100">{title}</div>
-      <div className="flex flex-col sm:flex-row">
+    <div style={{ border: '1px solid black', borderRadius: '5px', padding: '15px' }}>
+      <div className="pb-1 text-lg font-semibold text-gray-800 dark:text-gray-100 ">{title}</div>
+      <div className="flex flex-col sm:flex-row ">
         <div className="flex w-full mt-2 rounded-md shadow-sm sm:mt-0 sm:ml-3">
           <button
             style={{ backgroundColor: 'blue' }}
-            className={`py-2 sm:py-0 w-full bg-orange-500 px-4 rounded-md font-medium text-white ${
-              subscribed ? 'cursor-default' : 'hover:bg-orange-700 dark:hover:bg-orange-400'
-            } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-600 dark:ring-offset-black`}
+            className="hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
             type="submit"
             disabled={subscribed}
           >
