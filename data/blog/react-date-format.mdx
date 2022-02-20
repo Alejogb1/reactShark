@@ -3,7 +3,7 @@ title: 'Complete guide of Reactjs date format dd/mm/yyyy'
 date: '2021-08-28'
 tags: ['React', 'Guide']
 draft: false
-summary: 'The most clear way to format a date (dd/mm/yyyy) in React is to use the lightweight library: date-fns.'
+summary: 'The most clear way to format a date (dd/mm/yyyy) or (yyyy/mm/dd) in React is to use: date-fns. Also, in this article you will learn how to format dates with just Vanilla JavaScript!'
 ---
 
 ### Resources I've read to create this article:
@@ -14,26 +14,49 @@ summary: 'The most clear way to format a date (dd/mm/yyyy) in React is to use th
 
 ### Table of contents
 
-1. Solution date-fns
-2. Formatting with native Date js
-3. Exercise
-4. About momentjs
+1. Formatting **dd/mm/yyyy** with `date-fns` (SOLUTION)
+2. Formatting **yyyy/mm/dd** with `date-fns`
+3. Shorter solution with no dependency
+4. About moment.js
+5. Exercise
 
 ## Intro
 
-So one of the issues you might have when using `new Date()` (native JS function)
+So one of the issues is that you have when using `new Date()` (JS function)
 
-Is that it returns a long _unformatted_ date
+Is that it returns a long unformatted date
 
 Something like: `Mon Aug 09 2021 20:38:05 GMT-0300 (standard time of Argentina)`
 
 You want something much simpler like `Mon, 9 August 2021`
 
-## Solution: Date-fns
+Here is a quick showcase of **the solution**:
+
+```js
+import { format } from 'date-fns'
+
+// dd/mm/yyyy format
+format(new Date(), 'dd/mm/yyyy')
+
+// OR...
+// dd/mm/yyyy format
+
+format(new Date(), 'yyyy/mm/dd')
+```
+
+**Yes, it's that simple**.
+
+But it's recommended to **continue reading** so you get to know how to apply `date-fns` to your projects.
+
+## Formatting dd/mm/yyyy with `date-fns`
 
 You can check the [CodeSandbox](https://codesandbox.io/s/date-fns-03mgi?file=/src/App.js:311-321) of this section.
 
+For this first step we are going to have a **list of blog posts**:
+
 ```js
+// data.js
+
 const data = [
   {
     title: 'How to cook',
@@ -47,7 +70,11 @@ const data = [
 export default data
 ```
 
+After we have the `data.js` file, we are going to **map through every blog post**:
+
 ```js
+// App.js
+
 import data from './data'
 import { format } from 'date-fns'
 
@@ -78,9 +105,38 @@ Basically, **date-fns is modular**, allowing you to only use the functions you'l
 
 In conclusion, **date-fns performs much better** than momentjs.
 
-## Formatting with native Date js
+![Date fns vs Moment comparison](/static/images/date-vs-moment.svg)
 
-Here you have an option of just using Date native JavaScript functions to format your date in React.
+## Formatting yyyy-mm-dd \**with *date-fns\*
+
+Another thing people search for these days is “_react date format yyyy-mm-dd_”, they want to know how to format a React date with the year at the most left, then the month, and at the end of the days.
+
+```js
+// App.js
+
+import data from './data'
+import { format } from 'date-fns'
+
+export default function App() {
+  return (
+    <div>
+      <h1>Blog posts</h1>
+      <ul>
+        {data.map((post) => (
+          <li>
+            <h3>{post.title}</h3>
+            <p>{format(post.createdAt, 'yyyy/mm/dd')}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+```
+
+## Formatting dates with no dependency
+
+Here you have an option of just using native JavaScript functions to format your date in React.
 
 ```js
 function formatDate(newDate) {
@@ -126,6 +182,20 @@ return (
 
 You can check the [CodeSandbox](https://codesandbox.io/s/formatting-data-react-newdate-5bl6o) [](https://codesandbox.io/s/date-fns-03mgi?file=/src/App.js:311-321)of this section.
 
+## Shorter solution with no dependency
+
+(Stack Overflow version)
+
+```js
+let today = new Date()
+
+let date = today.getDate() + '-' + parseInt(today.getMonth() + 1) + '-' + today.getFullYear()
+
+console.log(date)
+```
+
+Go to the console and see how it formats `new Date()`.
+
 ## Want to use international formats?
 
 While this is less flexible, such as you are not formatting the date, you are just initializing your date based on the country standard.
@@ -153,20 +223,6 @@ const longEnUSFormatter = new Intl.DateTimeFormat('en-US', {
 console.log(longEnUSFormatter.format(firstValentineOfTheDecade))
 // February 14, 2020
 ```
-
-## Using Vanilla JavaScript to convert a date
-
-(Stack Overflow version)
-
-```js
-let today = new Date()
-
-let date = today.getDate() + '-' + parseInt(today.getMonth() + 1) + '-' + today.getFullYear()
-
-console.log(date)
-```
-
-Go to the console and see how it formats `new Date()`.
 
 ## Exercise
 

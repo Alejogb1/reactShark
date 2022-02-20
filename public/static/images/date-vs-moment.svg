@@ -1,0 +1,16 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1376.25 487.5" width="4128.75" height="1462.5">
+  <!-- svg-source:excalidraw -->
+  
+  <defs>
+    <style>
+      @font-face {
+        font-family: "Virgil";
+        src: url("https://excalidraw.com/Virgil.woff2");
+      }
+      @font-face {
+        font-family: "Cascadia";
+        src: url("https://excalidraw.com/Cascadia.woff2");
+      }
+    </style>
+  </defs>
+  <rect x="0" y="0" width="1376.25" height="487.5" fill="#ffffff"></rect><g stroke-linecap="round" transform="translate(10 18.75) rotate(0 308.75 225)"><path d="M0 0 C230.42 0, 460.84 0, 617.5 0 M0 0 C215.47 0, 430.93 0, 617.5 0 M617.5 0 C617.5 175.15, 617.5 350.3, 617.5 450 M617.5 0 C617.5 103.85, 617.5 207.71, 617.5 450 M617.5 450 C445.72 450, 273.94 450, 0 450 M617.5 450 C491.85 450, 366.2 450, 0 450 M0 450 C0 303.25, 0 156.51, 0 0 M0 450 C0 274.21, 0 98.42, 0 0" stroke="#000000" stroke-width="4" fill="none"></path></g><g transform="translate(125 62.75) rotate(0 189 52.5)"><text x="0" y="74.00000000000001" font-family="Virgil, Segoe UI Emoji" font-size="84.00000000000003px" fill="#000000" text-anchor="start" style="white-space: pre;" direction="ltr">Date-fns</text></g><g transform="translate(180 202.75) rotate(0 136.66666666666606 31.53846153846149)"><text x="0" y="44.076923076922974" font-family="Virgil, Segoe UI Emoji" font-size="50.46153846153842px" fill="#000000" text-anchor="start" style="white-space: pre;" direction="ltr">Size: 11.51kb</text></g><g stroke-linecap="round" transform="translate(748.75 10) rotate(0 308.75 233.75)"><path d="M0 0 C182.91 0, 365.81 0, 617.5 0 M0 0 C157.56 0, 315.12 0, 617.5 0 M617.5 0 C617.5 113.62, 617.5 227.24, 617.5 467.5 M617.5 0 C617.5 130.95, 617.5 261.9, 617.5 467.5 M617.5 467.5 C454.96 467.5, 292.42 467.5, 0 467.5 M617.5 467.5 C492.46 467.5, 367.42 467.5, 0 467.5 M0 467.5 C0 293.97, 0 120.44, 0 0 M0 467.5 C0 282.07, 0 96.64, 0 0" stroke="#000000" stroke-width="4" fill="none"></path></g><g transform="translate(898.75 44) rotate(0 149 52.5)"><text x="0" y="74" font-family="Virgil, Segoe UI Emoji" font-size="84.00000000000003px" fill="#000000" text-anchor="start" style="white-space: pre;" direction="ltr">Moment</text></g><g transform="translate(881.25 194) rotate(0 171.5 32)"><text x="0" y="45" font-family="Virgil, Segoe UI Emoji" font-size="50.46153846153842px" fill="#000000" text-anchor="start" style="white-space: pre;" direction="ltr">Size: 217.87kb</text></g><g transform="translate(80 340.25) rotate(0 246 35.03164556962025)"><text x="0" y="49.063291139240505" font-family="Virgil, Segoe UI Emoji" font-size="56.05063291139241px" fill="#0b7285" text-anchor="start" style="white-space: pre;" direction="ltr">8x - 10x FASTER</text></g></svg>
