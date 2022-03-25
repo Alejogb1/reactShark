@@ -12,7 +12,13 @@ Other keywords for this error are `module not found:`
 
 ## Fixing "**Can't resolve react router dom**"
 
-It's `react-router-dom`, not react-dom
+You have to install the dependency correctly. You may have typed “react-dom” into the console.
+
+![NPM console showing npm install react dom](/static/images/ReactDomConsole.png)
+
+⚠️ And that is wrong! It is `react-router-dom`, otherwise, by typing `react dom` you are installing the wrong dependency. So, check on that.
+
+### Keep seeing the error after installing the correct dependency?
 
 If you've made sure you have installed the correct dependency.
 
@@ -53,3 +59,7 @@ One easy way to check if you have installed a dependency, in VS Code, is to pres
 When using Typescript for a React project, you need to run the following command:
 
 `npm i @types/react-router-dom`
+
+## Conclusion
+
+Make sure to follow the first half of this article, because that’s where the central part of this error is coming from.
