@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import siteMetadata from '@/data/siteMetadata'
-const NewsletterForm = ({ title = 'Delightfully simple personal finance & budgeting' }) => {
+const NewsletterForm = ({ title = 'Delightfully simple personal finance & budgeting app' }) => {
   const inputEl = useRef(null)
   const [error, setError] = useState(false)
   const [message, setMessage] = useState('')
@@ -39,7 +39,7 @@ const NewsletterForm = ({ title = 'Delightfully simple personal finance & budget
             disabled={subscribed}
           >
             <a href="https://lunchmoney.app?fp_ref=alejo45" target="blank">
-              Check app
+              Get started
             </a>
           </button>
         </div>
