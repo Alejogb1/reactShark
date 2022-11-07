@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import siteMetadata from '@/data/siteMetadata'
-const NewsletterForm = ({ title = 'Delightfully simple personal finance & budgeting app' }) => {
+const NewsletterForm = ({ title = 'Formnest: The form solution for any developer' }) => {
   const inputEl = useRef(null)
   const [error, setError] = useState(false)
   const [message, setMessage] = useState('')
@@ -38,8 +38,8 @@ const NewsletterForm = ({ title = 'Delightfully simple personal finance & budget
             type="submit"
             disabled={subscribed}
           >
-            <a href="https://lunchmoney.app?fp_ref=alejo45" target="blank">
-              Get started
+            <a href="https://www.formnest.co/" target="blank">
+              Visit My App!
             </a>
           </button>
         </div>

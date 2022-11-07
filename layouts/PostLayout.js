@@ -1,4 +1,5 @@
 import Link from '@/components/Link'
+import { useEffect } from 'react'
 import PageTitle from '@/components/PageTitle'
 import SectionContainer from '@/components/SectionContainer'
 import { BlogSeo } from '@/components/SEO'
@@ -17,6 +18,20 @@ const postDateTemplate = { weekday: 'long', year: 'numeric', month: 'long', day:
 
 export default function PostLayout({ children, frontMatter, next, prev }) {
   const { slug, fileName, date, title, tags } = frontMatter
+
+  useEffect(() => {
+    const script = document.createElement('script')
+
+    script.src =
+      '<script id="mcjs">!function(c,h,i,m,p){m=c.createElement(h),p=c.getElementsByTagName(h)[0],m.async=1,m.src=i,p.parentNode.insertBefore(m,p)}(document,"script","https://chimpstatic.com/mcjs-connected/js/users/653e3d05207b63f06afbfb57f/6040009d4daa6a09663f3710c.js");</script>'
+    script.async = true
+
+    document.body.appendChild(script)
+
+    return () => {
+      document.body.removeChild(script)
+    }
+  }, [])
 
   return (
     <SectionContainer>
