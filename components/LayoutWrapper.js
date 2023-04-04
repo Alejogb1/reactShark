@@ -8,6 +8,8 @@ import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
 import { useState, useEffect } from 'react'
 import ReactGA from 'react-ga'
+import { XMarkIcon } from '@heroicons/react/20/solid'
+
 
 const LayoutWrapper = ({ children }, props) => {
   /* const location = props.location.pathname
@@ -27,8 +29,20 @@ const LayoutWrapper = ({ children }, props) => {
   }, [initialized, location])*/
 
   return (
+    
     <SectionContainer>
-      <div className="flex flex-col justify-between h-screen">
+      <div className="">
+            <p className=" font-semibold text-center text-black text rounded-lg underline" style={{ textDecoration: 'underline', paddingTop: '10px'}}>
+            <a
+              href="https://usegravity.app/?ref=reactshark"
+              target='_blank'
+            >
+            How I got to $10,000 per month with this Node.js boilerplate  
+            </a>
+            </p>
+        </div>
+      <div className="flex flex-col justify-between h-screen pt-2.5 ">
+      
         <header className="flex items-center justify-between py-10">
           <div>
             <Link href="/" aria-label="ReactShark">

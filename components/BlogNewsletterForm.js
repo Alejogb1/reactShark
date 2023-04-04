@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import siteMetadata from '@/data/siteMetadata'
-const NewsletterForm = ({ title = 'Formnest: The form solution for any developer' }) => {
+const NewsletterForm = ({ title = 'How I got $10,000 in MRR in less than 8 months with my SaaS' }, { description = 'Build a Node.js & React app at warp speed with this SaaS boilerplate.' }) => {
   const inputEl = useRef(null)
   const [error, setError] = useState(false)
   const [message, setMessage] = useState('')
@@ -29,17 +29,18 @@ const NewsletterForm = ({ title = 'Formnest: The form solution for any developer
 
   return (
     <div style={{ border: '1px solid black', borderRadius: '5px', padding: '15px' }}>
-      <div className="pb-1 text-lg font-semibold text-gray-800 dark:text-gray-100 ">{title}</div>
+      <div className="pb-1 text-lg font-semibold text-gray-800 dark:text-gray-100">{title}</div>
+      <div className="pb-1 text-md font-light text-gray-600 dark:text-gray-100 ">{description}</div> 
       <div className="flex flex-col sm:flex-row ">
-        <div className="flex w-full mt-2 rounded-md shadow-sm sm:mt-0 sm:ml-3">
+        <div className="flex w-full mt-2 rounded-md shadow-sm sm:mt-0">
           <button
             style={{ backgroundColor: 'blue' }}
             className="hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
             type="submit"
             disabled={subscribed}
           >
-            <a href="https://www.formnest.co/" target="blank">
-              Visit My App!
+            <a href="https://usegravity.app?ref=reactshark" target="blank">
+              Buy now
             </a>
           </button>
         </div>
